@@ -1,0 +1,202 @@
+// Sentavo Treasury Control Tower: measures
+// All measures live in the _Measures table. Reporting currency is CHF.
+//
+// Position measures (cash, bank exposure) are snapshots: they take the last
+// date in the current filter context instead of summing a balance over time.
+// On a card that is the as-of date; on a daily line chart each point is that day.
+
+
+// ============================================================
+// 1 Liquidity
+// ============================================================
+
+Cash CHF =
+VAR _AsOf = MAX ( FactLiquidityPosition[Date] )
+RETURN
+    CALCULATE (
+        SUM ( FactLiquidityPosition[Balance_CHF] ),
+        FactLiquidityPosition[Date] = _AsOf
+    )
+
+Cash at IHB CHF =
+CALCULATE (
+    [Cash CHF],
+    DimEntity[Role] = "Holding & in-house bank"
+)
+
+Cash Outside IHB CHF =
+[Cash CHF] - [Cash at IHB CHF]
+
+Cash Outside IHB % =
+DIVIDE ( [Cash Outside IHB CHF], [Cash CHF] )
+
+
+// ============================================================
+// 2 Counterparty risk
+// ============================================================
+
+// Only balances held at banks count against a limit. MMF and other
+// non-bank positions are excluded via CounterpartyType.
+Bank Exposure CHF =
+VAR _AsOf = MAX ( FactLiquidityPosition[Date] )
+RETURN
+    CALCULATE (
+        SUM ( FactLiquidityPosition[Balance_CHF] ),
+        FactLiquidityPosition[Date] = _AsOf,
+        FactLiquidityPosition[CounterpartyType] = "Bank"
+    )
+
+Counterparty Limit CHF =
+SUM ( DimBank[CounterpartyLimit_CHF] )
+
+// Internal alert line. New deposits are only placed up to 80% of a limit.
+Alert Threshold = 0.8
+
+Limit Utilisation % =
+DIVIDE ( [Bank Exposure CHF], [Counterparty Limit CHF] )
+
+Max Bank Utilisation % =
+MAXX ( VALUES ( DimBank[BankKey] ), [Limit Utilisation %] )
+
+// Bank-days above 100% of limit. With a bank on the axis it counts that
+// bank's days; with no bank selected it adds them up across banks.
+Days Over Limit =
+SUMX (
+    VALUES ( DimBank[BankKey] ),
+    COUNTROWS (
+        FILTER ( VALUES ( 'Date'[Date] ), [Limit Utilisation %] > 1 )
+    )
+)
+
+// Hex colour for conditional formatting (red / amber / green).
+Utilisation RAG Color =
+SWITCH (
+    TRUE (),
+    [Limit Utilisation %] > 1,                "#E5484D",
+    [Limit Utilisation %] >= [Alert Threshold], "#F5A623",
+    "#2FBF8F"
+)
+
+Credit Spread bps =
+AVERAGE ( FactCreditSpreads[CreditSpread_bps] )
+
+
+// ============================================================
+// 3 Forecast
+// ============================================================
+
+// Net cash flow excludes intercompany: it nets to zero at group level.
+// Each week has a forecast row per horizon (1, 4, 13 weeks ahead) and the
+// same actual is repeated on all three. Actuals are therefore read from the
+// 1-week rows only, otherwise they would be counted three times.
+Fcst Net 13W CHF =
+CALCULATE (
+    SUM ( FactCashForecast[Forecast_CHF] ),
+    FactCashForecast[FlowCategory] <> "Intercompany",
+    FactCashForecast[HorizonWeeks] = 13
+)
+
+Fcst Net 1W CHF =
+CALCULATE (
+    SUM ( FactCashForecast[Forecast_CHF] ),
+    FactCashForecast[FlowCategory] <> "Intercompany",
+    FactCashForecast[HorizonWeeks] = 1
+)
+
+Actual Net CHF =
+CALCULATE (
+    SUM ( FactCashForecast[Actual_CHF] ),
+    FactCashForecast[FlowCategory] <> "Intercompany",
+    FactCashForecast[HorizonWeeks] = 1
+)
+
+// 1 for the 13 weeks ending at the latest forecast week. Used as a
+// visual-level filter.
+Last13W Flag =
+VAR _Last = CALCULATE ( MAX ( FactCashForecast[WeekStart] ), REMOVEFILTERS () )
+VAR _Cur  = MAX ( 'Date'[WeekStart] )
+RETURN
+    IF ( _Cur > _Last - 91 && _Cur <= _Last, 1, 0 )
+
+// Running totals over the last 13 weeks. The date filter is removed and
+// rebuilt so each point is the sum from the start of the window to that week.
+Cum Fcst 13W CHF =
+VAR _Last  = CALCULATE ( MAX ( FactCashForecast[WeekStart] ), REMOVEFILTERS () )
+VAR _Start = _Last - 84
+VAR _Cur   = MAX ( 'Date'[WeekStart] )
+RETURN
+    IF (
+        _Cur >= _Start && _Cur <= _Last,
+        CALCULATE (
+            [Fcst Net 13W CHF],
+            REMOVEFILTERS ( 'Date' ),
+            'Date'[WeekStart] >= _Start,
+            'Date'[WeekStart] <= _Cur
+        )
+    )
+
+Cum Fcst 1W CHF =
+VAR _Last  = CALCULATE ( MAX ( FactCashForecast[WeekStart] ), REMOVEFILTERS () )
+VAR _Start = _Last - 84
+VAR _Cur   = MAX ( 'Date'[WeekStart] )
+RETURN
+    IF (
+        _Cur >= _Start && _Cur <= _Last,
+        CALCULATE (
+            [Fcst Net 1W CHF],
+            REMOVEFILTERS ( 'Date' ),
+            'Date'[WeekStart] >= _Start,
+            'Date'[WeekStart] <= _Cur
+        )
+    )
+
+Cum Actual CHF =
+VAR _Last  = CALCULATE ( MAX ( FactCashForecast[WeekStart] ), REMOVEFILTERS () )
+VAR _Start = _Last - 84
+VAR _Cur   = MAX ( 'Date'[WeekStart] )
+RETURN
+    IF (
+        _Cur >= _Start && _Cur <= _Last,
+        CALCULATE (
+            [Actual Net CHF],
+            REMOVEFILTERS ( 'Date' ),
+            'Date'[WeekStart] >= _Start,
+            'Date'[WeekStart] <= _Cur
+        )
+    )
+
+Cum Gap 13W CHF =
+[Cum Fcst 13W CHF] - [Cum Actual CHF]
+
+Abs Fcst Error CHF =
+SUMX (
+    FactCashForecast,
+    ABS ( FactCashForecast[Forecast_CHF] - FactCashForecast[Actual_CHF] )
+)
+
+// Denominator is always the 1-week actuals, so WAPE at 1, 4 and 13 weeks
+// is measured against the same base.
+Abs Actual CHF =
+CALCULATE (
+    SUMX ( FactCashForecast, ABS ( FactCashForecast[Actual_CHF] ) ),
+    FactCashForecast[HorizonWeeks] = 1
+)
+
+Forecast WAPE % =
+DIVIDE ( [Abs Fcst Error CHF], [Abs Actual CHF] )
+
+// Positive = forecast receipts above what actually came in.
+Receipts Bias % =
+VAR _F =
+    CALCULATE (
+        SUM ( FactCashForecast[Forecast_CHF] ),
+        FactCashForecast[FlowCategory] = "Customer receipts"
+    )
+VAR _A =
+    CALCULATE (
+        SUM ( FactCashForecast[Actual_CHF] ),
+        FactCashForecast[FlowCategory] = "Customer receipts",
+        FactCashForecast[HorizonWeeks] = 1
+    )
+RETURN
+    DIVIDE ( _F - _A, _A )

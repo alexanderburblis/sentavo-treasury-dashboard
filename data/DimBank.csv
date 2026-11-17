@@ -1,0 +1,8 @@
+BankKey,BankLabel,Tier,Segment,Country,Rating,Outlook,CounterpartyLimit_CHF_m,RatingSort,CounterpartyLimit_CHF
+B01,Core Bank 1,Core,Global cash management,CH,A+,Stable,150,3,150000000
+B02,Core Bank 2,Core,Global cash management,US,AA-,Stable,110,2,110000000
+B03,Core Bank 3,Core,European relationship bank,DE,A,Positive,90,4,90000000
+B04,Core Bank 4,Core,European relationship bank,FR,A+,Stable,100,3,100000000
+B05,Regional Bank CH,Regional,Domestic bank,CH,AA,Stable,100,1,100000000
+B06,Regional Bank PL,Regional,Local bank,PL,BBB+,Stable,12,5,12000000
+B07,Regional Bank SG,Regional,Local bank,SG,AA-,Stable,30,2,30000000

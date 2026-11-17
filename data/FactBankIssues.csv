@@ -1,0 +1,125 @@
+IssueID,BankKey,EntityKey,Area,Description,Severity,OpenDate,CloseDate,Status,ResolutionDays
+ISS-0001,B04,SIG-DE01,Connectivity,Host-to-host channel unavailable,High,2024-10-04,2024-10-08,Closed,4.0
+ISS-0002,B03,SIG-CH01,Payments,Cross-border payment returned by intermediary,High,2024-10-16,2024-10-19,Closed,3.0
+ISS-0003,B03,SIG-DE01,eBanking access,Signing rights not applied,Medium,2024-10-17,2024-10-23,Closed,6.0
+ISS-0004,B01,SIG-DE01,Statements,End-of-day statement missing for D-1,Medium,2024-10-21,2024-10-23,Closed,2.0
+ISS-0005,B02,SIG-CH02,Connectivity,Host-to-host channel unavailable,Medium,2024-10-21,2024-10-25,Closed,4.0
+ISS-0006,B03,SIG-SG01,Payments,Payment batch rejected – invalid creditor BIC,Low,2024-10-23,2024-11-17,Closed,25.0
+ISS-0007,B01,SIG-FR01,Statements,Statement balance mismatch vs eBanking,High,2024-10-28,2024-10-31,Closed,3.0
+ISS-0008,B04,SIG-CH01,Connectivity,Host-to-host channel unavailable,Low,2024-10-28,2024-11-14,Closed,17.0
+ISS-0009,B02,SIG-CH02,Statements,Intraday statement delayed,Medium,2024-11-06,2024-11-08,Closed,2.0
+ISS-0010,B02,SIG-CH02,Payments,Urgent payment executed after cut-off,High,2024-11-11,2024-11-14,Closed,3.0
+ISS-0011,B02,SIG-US01,eBanking access,New user set-up pending,Low,2024-11-21,2024-11-27,Closed,6.0
+ISS-0012,B01,SIG-US01,Payments,Cross-border payment returned by intermediary,Low,2024-11-28,2024-12-04,Closed,6.0
+ISS-0013,B03,SIG-SG01,Statements,End-of-day statement missing for D-1,Medium,2024-12-04,2024-12-07,Closed,3.0
+ISS-0014,B02,SIG-US01,Connectivity,Certificate renewal failed,Low,2024-12-11,2024-12-17,Closed,6.0
+ISS-0015,B03,SIG-CH01,Payments,Cross-border payment returned by intermediary,Low,2024-12-12,2024-12-21,Closed,9.0
+ISS-0016,B02,SIG-FR01,Connectivity,Host-to-host channel unavailable,Low,2024-12-23,2024-12-27,Closed,4.0
+ISS-0017,B01,SIG-CH01,Statements,End-of-day statement missing for D-1,Low,2024-12-27,2024-12-28,Closed,1.0
+ISS-0018,B04,SIG-CH02,Statements,End-of-day statement missing for D-1,Low,2025-01-17,2025-01-19,Closed,2.0
+ISS-0019,B01,SIG-PL01,Connectivity,File acknowledgement not received,Medium,2025-01-22,2025-01-30,Closed,8.0
+ISS-0020,B06,SIG-PL01,Payments,Duplicate debit on outgoing payment,Low,2025-02-07,2025-02-22,Closed,15.0
+ISS-0021,B06,SIG-IT01,Payments,Urgent payment executed after cut-off,Low,2025-02-10,2025-02-24,Closed,14.0
+ISS-0022,B03,SIG-FR01,Connectivity,File acknowledgement not received,Medium,2025-03-03,2025-03-11,Closed,8.0
+ISS-0023,B06,SIG-SG01,Payments,Payment batch rejected – invalid creditor BIC,High,2025-03-07,2025-03-22,Closed,15.0
+ISS-0024,B03,SIG-PL01,Fees & billing,Fee not in line with agreed tariff,Low,2025-03-11,2025-03-24,Closed,13.0
+ISS-0025,B04,SIG-PL01,Statements,Intraday statement delayed,Low,2025-03-14,2025-03-16,Closed,2.0
+ISS-0026,B01,SIG-CH02,Payments,Cross-border payment returned by intermediary,Medium,2025-03-18,2025-03-24,Closed,6.0
+ISS-0027,B01,SIG-IT01,KYC & onboarding,Signatory update pending KYC refresh,Low,2025-03-19,2025-03-24,Closed,5.0
+ISS-0028,B07,SIG-IT01,Statements,End-of-day statement missing for D-1,Medium,2025-03-31,2025-04-06,Closed,6.0
+ISS-0029,B02,SIG-US01,Statements,Statement balance mismatch vs eBanking,Low,2025-04-23,2025-04-27,Closed,4.0
+ISS-0030,B01,SIG-SG01,eBanking access,Signing rights not applied,Low,2025-05-02,2025-05-04,Closed,2.0
+ISS-0031,B01,SIG-FR01,KYC & onboarding,Periodic KYC review – additional documents,Medium,2025-05-06,2025-05-13,Closed,7.0
+ISS-0032,B01,SIG-PL01,Connectivity,Certificate renewal failed,Low,2025-05-07,2025-05-13,Closed,6.0
+ISS-0033,B03,SIG-IT01,Payments,Cross-border payment returned by intermediary,Medium,2025-05-12,2025-05-17,Closed,5.0
+ISS-0034,B05,SIG-CH02,Payments,Cross-border payment returned by intermediary,Low,2025-05-15,2025-05-17,Closed,2.0
+ISS-0035,B02,SIG-CH02,Payments,Payment batch rejected – invalid creditor BIC,Medium,2025-05-16,2025-05-20,Closed,4.0
+ISS-0036,B05,SIG-IT01,Payments,Cross-border payment returned by intermediary,High,2025-05-22,2025-05-26,Closed,4.0
+ISS-0037,B05,SIG-FR01,Fees & billing,Missing fee statement,Low,2025-05-30,2025-06-04,Closed,5.0
+ISS-0038,B06,SIG-PL01,Payments,Cross-border payment returned by intermediary,Low,2025-06-10,2025-06-19,Closed,9.0
+ISS-0039,B02,SIG-CH02,Statements,Intraday statement delayed,Low,2025-06-17,2025-06-19,Closed,2.0
+ISS-0040,B03,SIG-IT01,KYC & onboarding,Account opening documents re-requested,Medium,2025-06-23,2025-07-19,Closed,26.0
+ISS-0041,B03,SIG-SG01,Statements,Intraday statement delayed,Low,2025-06-26,2025-07-02,Closed,6.0
+ISS-0042,B02,SIG-FR01,Fees & billing,Fee charged twice,Low,2025-07-02,2025-07-10,Closed,8.0
+ISS-0043,B03,SIG-DE01,Connectivity,Host-to-host channel unavailable,Low,2025-07-15,2025-07-24,Closed,9.0
+ISS-0044,B01,SIG-FR01,Payments,Cross-border payment returned by intermediary,Medium,2025-07-17,2025-07-21,Closed,4.0
+ISS-0045,B02,SIG-PL01,KYC & onboarding,Account opening documents re-requested,Medium,2025-07-22,2025-08-08,Closed,17.0
+ISS-0046,B06,SIG-IT01,KYC & onboarding,Periodic KYC review – additional documents,Low,2025-07-22,2025-08-18,Closed,27.0
+ISS-0047,B03,SIG-IT01,Connectivity,Certificate renewal failed,Low,2025-07-29,2025-08-22,Closed,24.0
+ISS-0048,B05,SIG-IT01,Payments,Cross-border payment returned by intermediary,Medium,2025-07-31,2025-08-01,Closed,1.0
+ISS-0049,B03,SIG-CH01,Fees & billing,Fee not in line with agreed tariff,Medium,2025-08-14,2025-08-26,Closed,12.0
+ISS-0050,B03,SIG-SG01,KYC & onboarding,Signatory update pending KYC refresh,Medium,2025-08-20,2025-09-14,Closed,25.0
+ISS-0051,B04,SIG-DE01,Payments,Urgent payment executed after cut-off,Low,2025-09-08,2025-09-10,Closed,2.0
+ISS-0052,B07,SIG-CH02,Statements,End-of-day statement missing for D-1,Low,2025-09-08,2025-09-13,Closed,5.0
+ISS-0053,B06,SIG-US01,KYC & onboarding,Account opening documents re-requested,Medium,2025-09-17,2025-11-16,Closed,60.0
+ISS-0054,B05,SIG-IT01,Fees & billing,Fee not in line with agreed tariff,Medium,2025-09-19,2025-09-24,Closed,5.0
+ISS-0055,B03,SIG-CH01,Payments,Cross-border payment returned by intermediary,Medium,2025-09-25,2025-09-30,Closed,5.0
+ISS-0056,B02,SIG-FR01,Payments,Duplicate debit on outgoing payment,Low,2025-10-10,2025-10-15,Closed,5.0
+ISS-0057,B01,SIG-PL01,Payments,Duplicate debit on outgoing payment,High,2025-10-13,2025-10-16,Closed,3.0
+ISS-0058,B04,SIG-CH01,eBanking access,User token reset delayed,Low,2025-10-14,2025-10-19,Closed,5.0
+ISS-0059,B04,SIG-CH01,eBanking access,User token reset delayed,High,2025-10-22,2025-10-26,Closed,4.0
+ISS-0060,B01,SIG-FR01,Connectivity,Host-to-host channel unavailable,Low,2025-11-07,2025-11-14,Closed,7.0
+ISS-0061,B06,SIG-DE01,Payments,Duplicate debit on outgoing payment,Medium,2025-11-10,2025-11-16,Closed,6.0
+ISS-0062,B03,SIG-FR01,eBanking access,User token reset delayed,Medium,2025-11-18,2025-12-07,Closed,19.0
+ISS-0063,B04,SIG-US01,Payments,Urgent payment executed after cut-off,Medium,2025-11-21,2025-11-25,Closed,4.0
+ISS-0064,B06,SIG-PL01,Payments,Duplicate debit on outgoing payment,Low,2025-11-24,2025-11-30,Closed,6.0
+ISS-0065,B03,SIG-FR01,Payments,Payment batch rejected – invalid creditor BIC,Low,2025-11-27,2025-12-14,Closed,17.0
+ISS-0066,B04,SIG-FR01,Connectivity,File acknowledgement not received,Medium,2025-12-10,2025-12-15,Closed,5.0
+ISS-0067,B01,SIG-IT01,Statements,Statement balance mismatch vs eBanking,High,2025-12-10,2025-12-12,Closed,2.0
+ISS-0068,B02,SIG-CH01,Statements,Intraday statement delayed,Medium,2025-12-10,2025-12-12,Closed,2.0
+ISS-0069,B04,SIG-SG01,eBanking access,Signing rights not applied,Low,2025-12-16,2025-12-20,Closed,4.0
+ISS-0070,B02,SIG-US01,Payments,Payment batch rejected – invalid creditor BIC,Medium,2025-12-18,2025-12-25,Closed,7.0
+ISS-0071,B05,SIG-DE01,Payments,Payment batch rejected – invalid creditor BIC,Medium,2025-12-22,2025-12-24,Closed,2.0
+ISS-0072,B03,SIG-CH02,Connectivity,Certificate renewal failed,Low,2026-01-02,2026-01-18,Closed,16.0
+ISS-0073,B02,SIG-CH01,Payments,Cross-border payment returned by intermediary,Medium,2026-01-26,2026-01-31,Closed,5.0
+ISS-0074,B02,SIG-PL01,Fees & billing,Missing fee statement,High,2026-01-27,2026-01-31,Closed,4.0
+ISS-0075,B04,SIG-CH01,Payments,Duplicate debit on outgoing payment,Low,2026-01-28,2026-02-02,Closed,5.0
+ISS-0076,B02,SIG-PL01,eBanking access,Signing rights not applied,Low,2026-02-17,2026-02-22,Closed,5.0
+ISS-0077,B06,SIG-SG01,Payments,Cross-border payment returned by intermediary,High,2026-02-17,2026-02-20,Closed,3.0
+ISS-0078,B03,SIG-SG01,eBanking access,Signing rights not applied,Medium,2026-02-19,2026-03-04,Closed,13.0
+ISS-0079,B01,SIG-DE01,Statements,Intraday statement delayed,Low,2026-02-25,2026-02-26,Closed,1.0
+ISS-0080,B07,SIG-CH02,Statements,End-of-day statement missing for D-1,Low,2026-03-10,2026-03-13,Closed,3.0
+ISS-0081,B02,SIG-US01,eBanking access,Signing rights not applied,Low,2026-03-12,2026-03-13,Closed,1.0
+ISS-0082,B07,SIG-SG01,Payments,Urgent payment executed after cut-off,Low,2026-03-16,2026-03-24,Closed,8.0
+ISS-0083,B05,SIG-US01,Payments,Cross-border payment returned by intermediary,Low,2026-03-17,2026-03-20,Closed,3.0
+ISS-0084,B04,SIG-CH01,Connectivity,Certificate renewal failed,Low,2026-03-26,2026-03-31,Closed,5.0
+ISS-0085,B03,SIG-CH01,Fees & billing,Fee not in line with agreed tariff,Low,2026-04-01,2026-04-09,Closed,8.0
+ISS-0086,B04,SIG-DE01,Statements,End-of-day statement missing for D-1,Medium,2026-04-03,2026-04-07,Closed,4.0
+ISS-0087,B03,SIG-FR01,Statements,End-of-day statement missing for D-1,Medium,2026-04-17,2026-04-20,Closed,3.0
+ISS-0088,B01,SIG-DE01,Statements,Statement balance mismatch vs eBanking,Low,2026-04-24,2026-04-26,Closed,2.0
+ISS-0089,B03,SIG-CH01,Statements,Intraday statement delayed,Low,2026-05-11,2026-05-15,Closed,4.0
+ISS-0090,B01,SIG-FR01,Fees & billing,Fee charged twice,Low,2026-05-12,2026-05-15,Closed,3.0
+ISS-0091,B06,SIG-PL01,Payments,Cross-border payment returned by intermediary,High,2026-05-21,2026-05-26,Closed,5.0
+ISS-0092,B01,SIG-SG01,Statements,Statement balance mismatch vs eBanking,Low,2026-05-26,2026-05-28,Closed,2.0
+ISS-0093,B07,SIG-SG01,KYC & onboarding,Signatory update pending KYC refresh,Medium,2026-06-03,2026-06-09,Closed,6.0
+ISS-0094,B04,SIG-DE01,Connectivity,Certificate renewal failed,Low,2026-06-10,2026-06-18,Closed,8.0
+ISS-0095,B04,SIG-SG01,Connectivity,File acknowledgement not received,Low,2026-06-12,2026-06-17,Closed,5.0
+ISS-0096,B03,SIG-FR01,Statements,Statement balance mismatch vs eBanking,Low,2026-06-12,2026-06-16,Closed,4.0
+ISS-0097,B02,SIG-SG01,Connectivity,Certificate renewal failed,Low,2026-06-12,2026-06-14,Closed,2.0
+ISS-0098,B01,SIG-CH01,Fees & billing,Fee not in line with agreed tariff,Medium,2026-06-24,2026-07-01,Closed,7.0
+ISS-0099,B01,SIG-DE01,Connectivity,Host-to-host channel unavailable,Medium,2026-06-26,2026-07-05,Closed,9.0
+ISS-0100,B01,SIG-CH01,eBanking access,Signing rights not applied,Medium,2026-06-26,2026-06-30,Closed,4.0
+ISS-0101,B05,SIG-DE01,Statements,Intraday statement delayed,Medium,2026-07-01,2026-07-04,Closed,3.0
+ISS-0102,B02,SIG-US01,Fees & billing,Missing fee statement,Low,2026-07-07,2026-07-14,Closed,7.0
+ISS-0103,B01,SIG-IT01,eBanking access,New user set-up pending,Medium,2026-07-08,2026-07-12,Closed,4.0
+ISS-0104,B02,SIG-CH02,Payments,Duplicate debit on outgoing payment,Low,2026-07-20,2026-07-24,Closed,4.0
+ISS-0105,B01,SIG-SG01,Payments,Cross-border payment returned by intermediary,Low,2026-08-03,2026-08-08,Closed,5.0
+ISS-0106,B02,SIG-DE01,Statements,Statement balance mismatch vs eBanking,High,2026-08-10,2026-08-12,Closed,2.0
+ISS-0107,B04,SIG-IT01,Payments,Payment batch rejected – invalid creditor BIC,Medium,2026-08-12,2026-08-16,Closed,4.0
+ISS-0108,B04,SIG-SG01,Fees & billing,Missing fee statement,Low,2026-08-13,2026-08-19,Closed,6.0
+ISS-0109,B01,SIG-CH01,Payments,Cross-border payment returned by intermediary,High,2026-08-13,2026-08-14,Closed,1.0
+ISS-0110,B05,SIG-CH02,Payments,Payment batch rejected – invalid creditor BIC,High,2026-08-14,2026-08-17,Closed,3.0
+ISS-0111,B04,SIG-SG01,Payments,Cross-border payment returned by intermediary,Medium,2026-08-17,2026-09-06,Closed,20.0
+ISS-0112,B04,SIG-SG01,Payments,Duplicate debit on outgoing payment,Low,2026-08-24,2026-08-26,Closed,2.0
+ISS-0113,B02,SIG-IT01,KYC & onboarding,Periodic KYC review – additional documents,Medium,2026-08-25,2026-09-07,Closed,13.0
+ISS-0114,B03,SIG-SG01,Statements,Statement balance mismatch vs eBanking,Low,2026-09-03,,Open,
+ISS-0115,B03,SIG-CH01,KYC & onboarding,Account opening documents re-requested,Medium,2026-09-11,2026-09-23,Closed,12.0
+ISS-0116,B01,SIG-CH02,Payments,Urgent payment executed after cut-off,Low,2026-09-21,2026-09-24,Closed,3.0
+ISS-0117,B05,SIG-CH01,Fees & billing,Missing fee statement,Medium,2026-09-22,,Open,
+ISS-0118,B03,SIG-CH01,Payments,Payment batch rejected – invalid creditor BIC,Medium,2026-09-23,,In progress,
+ISS-0119,B02,SIG-CH02,Payments,Payment batch rejected – invalid creditor BIC,High,2026-09-24,2026-09-27,Closed,3.0
+ISS-0120,B02,SIG-CH02,Payments,Cross-border payment returned by intermediary,Low,2026-09-24,,In progress,
+ISS-0121,B06,SIG-CH01,Fees & billing,Fee not in line with agreed tariff,Low,2026-09-24,,In progress,
+ISS-0122,B03,SIG-DE01,Payments,Urgent payment executed after cut-off,Low,2026-09-24,,In progress,
+ISS-0123,B02,SIG-CH02,Fees & billing,Fee charged twice,Low,2026-09-25,,Open,
+ISS-0124,B01,SIG-FR01,Statements,End-of-day statement missing for D-1,Medium,2026-09-28,,In progress,

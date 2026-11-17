@@ -1,0 +1,9 @@
+EntityKey,EntityName,Country,FunctionalCurrency,Role
+SIG-CH01,Sentavo Industrial Group AG,CH,CHF,Holding & in-house bank
+SIG-CH02,Sentavo Manufacturing AG,CH,CHF,Operating company
+SIG-DE01,Sentavo Deutschland GmbH,DE,EUR,Operating company
+SIG-FR01,Sentavo France SAS,FR,EUR,Sales company
+SIG-IT01,Sentavo Italia S.r.l.,IT,EUR,Sales company
+SIG-PL01,Sentavo Polska Sp. z o.o.,PL,PLN,Operating company
+SIG-US01,Sentavo Americas Inc.,US,USD,Operating company
+SIG-SG01,Sentavo Asia Pacific Pte. Ltd.,SG,SGD,Sales company

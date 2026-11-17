@@ -1,0 +1,106 @@
+{
+  "name": "Treasury Dark - Blue",
+  "dataColors": [
+    "#0091DA",
+    "#00B8F5",
+    "#005EB8",
+    "#8FA3C7",
+    "#2FBF8F",
+    "#F5A623",
+    "#E5484D",
+    "#7213EA"
+  ],
+  "background": "#111B2E",
+  "foreground": "#E8EEF9",
+  "tableAccent": "#0091DA",
+  "good": "#2FBF8F",
+  "neutral": "#F5A623",
+  "bad": "#E5484D",
+  "maximum": "#00B8F5",
+  "center": "#005EB8",
+  "minimum": "#00338D",
+  "textClasses": {
+    "callout": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 24,
+      "color": "#E8EEF9"
+    },
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 12,
+      "color": "#E8EEF9"
+    },
+    "header": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 11,
+      "color": "#E8EEF9"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 9,
+      "color": "#8FA3C7"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#111B2E"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#1F2D4A"
+              }
+            },
+            "radius": 8
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": false
+          }
+        ],
+        "valueAxis": [
+          {
+            "gridlineShow": true,
+            "gridlineColor": {
+              "solid": {
+                "color": "#1F2D4A"
+              }
+            }
+          }
+        ],
+        "categoryAxis": [
+          {
+            "gridlineShow": false
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#0B1220"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}

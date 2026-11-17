@@ -1,0 +1,5 @@
+FundKey,FundName,SponsorBankKey,Currency,FundType,FundRating,RatingBucket
+F01,Core Bank 2 USD Treasury MMF,B02,USD,Public Debt CNAV,AAAmmf,AAA
+F02,Core Bank 4 EUR Liquidity MMF,B04,EUR,LVNAV,AAAmmf,AAA
+F03,Core Bank 1 EUR Liquidity MMF,B01,EUR,LVNAV,AAAmmf,AAA
+F04,Core Bank 1 EUR Short-Term VNAV MMF,B01,EUR,Standard VNAV,AA+f,Non-AAA

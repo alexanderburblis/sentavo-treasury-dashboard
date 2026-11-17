@@ -1,0 +1,553 @@
+FeeMonth,BankKey,FeeCategory,Amount_CHF
+2024-10-01,B01,Account maintenance,6198.86
+2024-10-01,B01,Payments & collections,13830.14
+2024-10-01,B01,Cash pooling,5068.87
+2024-10-01,B01,Connectivity & eBanking,4137.19
+2024-10-01,B02,Account maintenance,4157.55
+2024-10-01,B02,Payments & collections,9850.19
+2024-10-01,B02,Connectivity & eBanking,6309.05
+2024-10-01,B03,Account maintenance,3004.85
+2024-10-01,B03,Payments & collections,6340.69
+2024-10-01,B03,Connectivity & eBanking,1948.52
+2024-10-01,B04,Account maintenance,3751.54
+2024-10-01,B04,Payments & collections,8949.68
+2024-10-01,B04,Cash pooling,1968.56
+2024-10-01,B04,Connectivity & eBanking,2021.27
+2024-10-01,B05,Account maintenance,2001.42
+2024-10-01,B05,Payments & collections,4831.74
+2024-10-01,B05,Connectivity & eBanking,966.31
+2024-10-01,B06,Account maintenance,785.9
+2024-10-01,B06,Payments & collections,2311.48
+2024-10-01,B06,Connectivity & eBanking,390.07
+2024-10-01,B07,Account maintenance,943.87
+2024-10-01,B07,Payments & collections,2316.9
+2024-10-01,B07,Connectivity & eBanking,591.56
+2024-11-01,B01,Account maintenance,6160.73
+2024-11-01,B01,Payments & collections,15024.8
+2024-11-01,B01,Cash pooling,5090.94
+2024-11-01,B01,Connectivity & eBanking,4149.44
+2024-11-01,B02,Account maintenance,4016.25
+2024-11-01,B02,Payments & collections,10140.78
+2024-11-01,B02,Connectivity & eBanking,5840.84
+2024-11-01,B03,Account maintenance,2862.95
+2024-11-01,B03,Payments & collections,7079.14
+2024-11-01,B03,Connectivity & eBanking,1996.41
+2024-11-01,B04,Account maintenance,4012.62
+2024-11-01,B04,Payments & collections,8404.64
+2024-11-01,B04,Cash pooling,1907.01
+2024-11-01,B04,Connectivity & eBanking,2069.17
+2024-11-01,B05,Account maintenance,2045.88
+2024-11-01,B05,Payments & collections,4607.6
+2024-11-01,B05,Connectivity & eBanking,1013.93
+2024-11-01,B06,Account maintenance,833.12
+2024-11-01,B06,Payments & collections,2143.7
+2024-11-01,B06,Connectivity & eBanking,403.37
+2024-11-01,B07,Account maintenance,980.41
+2024-11-01,B07,Payments & collections,2781.01
+2024-11-01,B07,Connectivity & eBanking,604.08
+2024-12-01,B01,Account maintenance,5761.29
+2024-12-01,B01,Payments & collections,14402.33
+2024-12-01,B01,Cash pooling,4737.17
+2024-12-01,B01,Connectivity & eBanking,4242.07
+2024-12-01,B02,Account maintenance,4043.21
+2024-12-01,B02,Payments & collections,10380.52
+2024-12-01,B02,Connectivity & eBanking,6423.43
+2024-12-01,B03,Account maintenance,2928.87
+2024-12-01,B03,Payments & collections,6694.23
+2024-12-01,B03,Connectivity & eBanking,1961.53
+2024-12-01,B04,Account maintenance,3749.62
+2024-12-01,B04,Payments & collections,9127.27
+2024-12-01,B04,Cash pooling,1855.2
+2024-12-01,B04,Connectivity & eBanking,1966.23
+2024-12-01,B05,Account maintenance,2011.38
+2024-12-01,B05,Payments & collections,4699.89
+2024-12-01,B05,Connectivity & eBanking,1027.02
+2024-12-01,B06,Account maintenance,802.63
+2024-12-01,B06,Payments & collections,1851.02
+2024-12-01,B06,Connectivity & eBanking,401.21
+2024-12-01,B07,Account maintenance,1041.91
+2024-12-01,B07,Payments & collections,2506.79
+2024-12-01,B07,Connectivity & eBanking,584.91
+2025-01-01,B01,Account maintenance,6156.87
+2025-01-01,B01,Payments & collections,15263.56
+2025-01-01,B01,Cash pooling,5019.81
+2025-01-01,B01,Connectivity & eBanking,4194.79
+2025-01-01,B02,Account maintenance,3982.79
+2025-01-01,B02,Payments & collections,9671.95
+2025-01-01,B02,Connectivity & eBanking,6099.53
+2025-01-01,B03,Account maintenance,2965.96
+2025-01-01,B03,Payments & collections,7090.36
+2025-01-01,B03,Connectivity & eBanking,2044.55
+2025-01-01,B04,Account maintenance,4178.92
+2025-01-01,B04,Payments & collections,9643.43
+2025-01-01,B04,Cash pooling,2025.96
+2025-01-01,B04,Connectivity & eBanking,1978.18
+2025-01-01,B05,Account maintenance,2000.78
+2025-01-01,B05,Payments & collections,4744.63
+2025-01-01,B05,Connectivity & eBanking,959.93
+2025-01-01,B06,Account maintenance,788.83
+2025-01-01,B06,Payments & collections,2443.31
+2025-01-01,B06,Connectivity & eBanking,385.75
+2025-01-01,B07,Account maintenance,1005.25
+2025-01-01,B07,Payments & collections,2788.92
+2025-01-01,B07,Connectivity & eBanking,599.18
+2025-02-01,B01,Account maintenance,5843.44
+2025-02-01,B01,Payments & collections,12893.99
+2025-02-01,B01,Cash pooling,5279.07
+2025-02-01,B01,Connectivity & eBanking,4050.97
+2025-02-01,B02,Account maintenance,4197.15
+2025-02-01,B02,Payments & collections,11606.26
+2025-02-01,B02,Connectivity & eBanking,5809.19
+2025-02-01,B03,Account maintenance,2889.84
+2025-02-01,B03,Payments & collections,6987.8
+2025-02-01,B03,Connectivity & eBanking,2007.27
+2025-02-01,B04,Account maintenance,4028.88
+2025-02-01,B04,Payments & collections,8967.96
+2025-02-01,B04,Cash pooling,1989.31
+2025-02-01,B04,Connectivity & eBanking,2103.01
+2025-02-01,B05,Account maintenance,1900.19
+2025-02-01,B05,Payments & collections,4882.48
+2025-02-01,B05,Connectivity & eBanking,1030.59
+2025-02-01,B06,Account maintenance,831.73
+2025-02-01,B06,Payments & collections,2244.38
+2025-02-01,B06,Connectivity & eBanking,413.69
+2025-02-01,B07,Account maintenance,1025.82
+2025-02-01,B07,Payments & collections,2876.96
+2025-02-01,B07,Connectivity & eBanking,579.29
+2025-03-01,B01,Account maintenance,5981.21
+2025-03-01,B01,Payments & collections,13450.47
+2025-03-01,B01,Cash pooling,4903.67
+2025-03-01,B01,Connectivity & eBanking,3950.66
+2025-03-01,B02,Account maintenance,3819.34
+2025-03-01,B02,Payments & collections,10788.24
+2025-03-01,B02,Connectivity & eBanking,6027.03
+2025-03-01,B03,Account maintenance,2864.58
+2025-03-01,B03,Payments & collections,5424.22
+2025-03-01,B03,Connectivity & eBanking,2103.14
+2025-03-01,B04,Account maintenance,3826.51
+2025-03-01,B04,Payments & collections,8617.36
+2025-03-01,B04,Cash pooling,2120.26
+2025-03-01,B04,Connectivity & eBanking,1940.4
+2025-03-01,B05,Account maintenance,1924.67
+2025-03-01,B05,Payments & collections,4825.76
+2025-03-01,B05,Connectivity & eBanking,1004.1
+2025-03-01,B06,Account maintenance,803.26
+2025-03-01,B06,Payments & collections,2219.93
+2025-03-01,B06,Connectivity & eBanking,409.38
+2025-03-01,B07,Account maintenance,1009.76
+2025-03-01,B07,Payments & collections,2658.38
+2025-03-01,B07,Connectivity & eBanking,574.37
+2025-04-01,B01,Account maintenance,5894.77
+2025-04-01,B01,Payments & collections,14364.8
+2025-04-01,B01,Cash pooling,4988.65
+2025-04-01,B01,Connectivity & eBanking,4116.49
+2025-04-01,B02,Account maintenance,3960.39
+2025-04-01,B02,Payments & collections,9488.63
+2025-04-01,B02,Connectivity & eBanking,6102.56
+2025-04-01,B03,Account maintenance,2899.29
+2025-04-01,B03,Payments & collections,6111.17
+2025-04-01,B03,Connectivity & eBanking,2014.9
+2025-04-01,B04,Account maintenance,3993.08
+2025-04-01,B04,Payments & collections,9193.72
+2025-04-01,B04,Cash pooling,1995.27
+2025-04-01,B04,Connectivity & eBanking,2062.9
+2025-04-01,B05,Account maintenance,2008.42
+2025-04-01,B05,Payments & collections,4919.59
+2025-04-01,B05,Connectivity & eBanking,981.54
+2025-04-01,B06,Account maintenance,782.3
+2025-04-01,B06,Payments & collections,2410.22
+2025-04-01,B06,Connectivity & eBanking,397.08
+2025-04-01,B07,Account maintenance,1000.26
+2025-04-01,B07,Payments & collections,2580.25
+2025-04-01,B07,Connectivity & eBanking,565.51
+2025-05-01,B01,Account maintenance,5464.98
+2025-05-01,B01,Payments & collections,13666.73
+2025-05-01,B01,Cash pooling,5271.05
+2025-05-01,B01,Connectivity & eBanking,3914.33
+2025-05-01,B02,Account maintenance,4052.37
+2025-05-01,B02,Payments & collections,8679.0
+2025-05-01,B02,Connectivity & eBanking,6216.46
+2025-05-01,B03,Account maintenance,3044.42
+2025-05-01,B03,Payments & collections,7283.51
+2025-05-01,B03,Connectivity & eBanking,1945.6
+2025-05-01,B04,Account maintenance,3929.77
+2025-05-01,B04,Payments & collections,8967.41
+2025-05-01,B04,Cash pooling,2028.09
+2025-05-01,B04,Connectivity & eBanking,1936.32
+2025-05-01,B05,Account maintenance,1841.89
+2025-05-01,B05,Payments & collections,4040.69
+2025-05-01,B05,Connectivity & eBanking,1016.62
+2025-05-01,B06,Account maintenance,783.95
+2025-05-01,B06,Payments & collections,2004.78
+2025-05-01,B06,Connectivity & eBanking,389.21
+2025-05-01,B07,Account maintenance,976.72
+2025-05-01,B07,Payments & collections,2533.21
+2025-05-01,B07,Connectivity & eBanking,602.45
+2025-06-01,B01,Account maintenance,6061.36
+2025-06-01,B01,Payments & collections,16158.12
+2025-06-01,B01,Cash pooling,4887.03
+2025-06-01,B01,Connectivity & eBanking,3890.78
+2025-06-01,B02,Account maintenance,3963.78
+2025-06-01,B02,Payments & collections,11427.01
+2025-06-01,B02,Connectivity & eBanking,5755.21
+2025-06-01,B03,Account maintenance,2859.83
+2025-06-01,B03,Payments & collections,6502.4
+2025-06-01,B03,Connectivity & eBanking,2006.05
+2025-06-01,B04,Account maintenance,4042.33
+2025-06-01,B04,Payments & collections,7961.42
+2025-06-01,B04,Cash pooling,1944.07
+2025-06-01,B04,Connectivity & eBanking,1867.28
+2025-06-01,B05,Account maintenance,2052.05
+2025-06-01,B05,Payments & collections,5210.95
+2025-06-01,B05,Connectivity & eBanking,1027.39
+2025-06-01,B06,Account maintenance,796.92
+2025-06-01,B06,Payments & collections,2281.46
+2025-06-01,B06,Connectivity & eBanking,400.47
+2025-06-01,B07,Account maintenance,999.65
+2025-06-01,B07,Payments & collections,2135.66
+2025-06-01,B07,Connectivity & eBanking,580.18
+2025-07-01,B01,Account maintenance,6127.53
+2025-07-01,B01,Payments & collections,14581.62
+2025-07-01,B01,Cash pooling,4623.22
+2025-07-01,B01,Connectivity & eBanking,3360.91
+2025-07-01,B02,Account maintenance,4030.28
+2025-07-01,B02,Payments & collections,9507.68
+2025-07-01,B02,Connectivity & eBanking,5672.21
+2025-07-01,B03,Account maintenance,3081.15
+2025-07-01,B03,Payments & collections,7120.28
+2025-07-01,B03,Connectivity & eBanking,2053.25
+2025-07-01,B04,Account maintenance,4234.53
+2025-07-01,B04,Payments & collections,9687.55
+2025-07-01,B04,Cash pooling,2003.14
+2025-07-01,B04,Connectivity & eBanking,2076.22
+2025-07-01,B05,Account maintenance,2002.97
+2025-07-01,B05,Payments & collections,4393.34
+2025-07-01,B05,Connectivity & eBanking,1008.03
+2025-07-01,B06,Account maintenance,822.35
+2025-07-01,B06,Payments & collections,2050.71
+2025-07-01,B06,Connectivity & eBanking,400.12
+2025-07-01,B07,Account maintenance,952.45
+2025-07-01,B07,Payments & collections,2250.78
+2025-07-01,B07,Connectivity & eBanking,625.3
+2025-08-01,B01,Account maintenance,5772.44
+2025-08-01,B01,Payments & collections,14752.92
+2025-08-01,B01,Cash pooling,5295.29
+2025-08-01,B01,Connectivity & eBanking,3418.6
+2025-08-01,B02,Account maintenance,4023.96
+2025-08-01,B02,Payments & collections,10720.38
+2025-08-01,B02,Connectivity & eBanking,5764.85
+2025-08-01,B03,Account maintenance,3060.2
+2025-08-01,B03,Payments & collections,7071.44
+2025-08-01,B03,Connectivity & eBanking,1919.58
+2025-08-01,B04,Account maintenance,4021.31
+2025-08-01,B04,Payments & collections,9260.07
+2025-08-01,B04,Cash pooling,1920.29
+2025-08-01,B04,Connectivity & eBanking,1952.7
+2025-08-01,B05,Account maintenance,2131.36
+2025-08-01,B05,Payments & collections,5352.04
+2025-08-01,B05,Connectivity & eBanking,980.84
+2025-08-01,B06,Account maintenance,790.1
+2025-08-01,B06,Payments & collections,2038.76
+2025-08-01,B06,Connectivity & eBanking,416.29
+2025-08-01,B07,Account maintenance,1004.13
+2025-08-01,B07,Payments & collections,2589.57
+2025-08-01,B07,Connectivity & eBanking,595.81
+2025-09-01,B01,Account maintenance,5928.09
+2025-09-01,B01,Payments & collections,12621.58
+2025-09-01,B01,Cash pooling,4869.29
+2025-09-01,B01,Connectivity & eBanking,3332.41
+2025-09-01,B02,Account maintenance,3933.84
+2025-09-01,B02,Payments & collections,11924.07
+2025-09-01,B02,Connectivity & eBanking,6102.77
+2025-09-01,B03,Account maintenance,2989.63
+2025-09-01,B03,Payments & collections,6336.5
+2025-09-01,B03,Connectivity & eBanking,1914.94
+2025-09-01,B04,Account maintenance,3851.62
+2025-09-01,B04,Payments & collections,8641.23
+2025-09-01,B04,Cash pooling,2028.48
+2025-09-01,B04,Connectivity & eBanking,2011.57
+2025-09-01,B05,Account maintenance,2037.74
+2025-09-01,B05,Payments & collections,5175.86
+2025-09-01,B05,Connectivity & eBanking,1007.06
+2025-09-01,B06,Account maintenance,788.18
+2025-09-01,B06,Payments & collections,2288.16
+2025-09-01,B06,Connectivity & eBanking,381.12
+2025-09-01,B07,Account maintenance,978.94
+2025-09-01,B07,Payments & collections,2284.12
+2025-09-01,B07,Connectivity & eBanking,603.72
+2025-10-01,B01,Account maintenance,6094.88
+2025-10-01,B01,Payments & collections,14425.72
+2025-10-01,B01,Cash pooling,5238.03
+2025-10-01,B01,Connectivity & eBanking,3315.84
+2025-10-01,B02,Account maintenance,4072.31
+2025-10-01,B02,Payments & collections,10033.83
+2025-10-01,B02,Connectivity & eBanking,5989.74
+2025-10-01,B03,Account maintenance,2826.39
+2025-10-01,B03,Payments & collections,6927.24
+2025-10-01,B03,Connectivity & eBanking,1961.81
+2025-10-01,B04,Account maintenance,4070.45
+2025-10-01,B04,Payments & collections,9088.33
+2025-10-01,B04,Cash pooling,2073.9
+2025-10-01,B04,Connectivity & eBanking,2047.7
+2025-10-01,B05,Account maintenance,2076.22
+2025-10-01,B05,Payments & collections,5299.52
+2025-10-01,B05,Connectivity & eBanking,962.38
+2025-10-01,B06,Account maintenance,808.44
+2025-10-01,B06,Payments & collections,2210.4
+2025-10-01,B06,Connectivity & eBanking,406.27
+2025-10-01,B07,Account maintenance,1056.39
+2025-10-01,B07,Payments & collections,2329.83
+2025-10-01,B07,Connectivity & eBanking,616.5
+2025-11-01,B01,Account maintenance,6243.64
+2025-11-01,B01,Payments & collections,12579.97
+2025-11-01,B01,Cash pooling,5210.2
+2025-11-01,B01,Connectivity & eBanking,3476.56
+2025-11-01,B02,Account maintenance,3983.28
+2025-11-01,B02,Payments & collections,9811.42
+2025-11-01,B02,Connectivity & eBanking,6208.45
+2025-11-01,B03,Account maintenance,2974.95
+2025-11-01,B03,Payments & collections,6989.07
+2025-11-01,B03,Connectivity & eBanking,2077.53
+2025-11-01,B04,Account maintenance,3871.42
+2025-11-01,B04,Payments & collections,8325.56
+2025-11-01,B04,Cash pooling,2011.85
+2025-11-01,B04,Connectivity & eBanking,1981.06
+2025-11-01,B05,Account maintenance,2081.08
+2025-11-01,B05,Payments & collections,5248.91
+2025-11-01,B05,Connectivity & eBanking,1009.77
+2025-11-01,B06,Account maintenance,791.43
+2025-11-01,B06,Payments & collections,2458.94
+2025-11-01,B06,Connectivity & eBanking,414.51
+2025-11-01,B07,Account maintenance,987.17
+2025-11-01,B07,Payments & collections,2644.9
+2025-11-01,B07,Connectivity & eBanking,593.72
+2025-12-01,B01,Account maintenance,6092.21
+2025-12-01,B01,Payments & collections,12533.03
+2025-12-01,B01,Cash pooling,5279.36
+2025-12-01,B01,Connectivity & eBanking,3441.34
+2025-12-01,B02,Account maintenance,4121.95
+2025-12-01,B02,Payments & collections,11078.97
+2025-12-01,B02,Connectivity & eBanking,6041.34
+2025-12-01,B03,Account maintenance,3052.53
+2025-12-01,B03,Payments & collections,7031.27
+2025-12-01,B03,Connectivity & eBanking,1977.28
+2025-12-01,B04,Account maintenance,3911.74
+2025-12-01,B04,Payments & collections,9523.73
+2025-12-01,B04,Cash pooling,1990.43
+2025-12-01,B04,Connectivity & eBanking,1974.8
+2025-12-01,B05,Account maintenance,2066.2
+2025-12-01,B05,Payments & collections,5658.98
+2025-12-01,B05,Connectivity & eBanking,949.55
+2025-12-01,B06,Account maintenance,805.92
+2025-12-01,B06,Payments & collections,2199.05
+2025-12-01,B06,Connectivity & eBanking,406.67
+2025-12-01,B07,Account maintenance,978.54
+2025-12-01,B07,Payments & collections,2486.55
+2025-12-01,B07,Connectivity & eBanking,626.88
+2026-01-01,B01,Account maintenance,5984.28
+2026-01-01,B01,Payments & collections,15372.47
+2026-01-01,B01,Cash pooling,5048.29
+2026-01-01,B01,Connectivity & eBanking,3419.64
+2026-01-01,B02,Account maintenance,4119.54
+2026-01-01,B02,Payments & collections,10011.42
+2026-01-01,B02,Connectivity & eBanking,5999.79
+2026-01-01,B03,Account maintenance,3000.16
+2026-01-01,B03,Payments & collections,8776.68
+2026-01-01,B03,Connectivity & eBanking,2064.2
+2026-01-01,B04,Account maintenance,3863.15
+2026-01-01,B04,Payments & collections,10568.85
+2026-01-01,B04,Cash pooling,1937.89
+2026-01-01,B04,Connectivity & eBanking,2038.63
+2026-01-01,B05,Account maintenance,1977.92
+2026-01-01,B05,Payments & collections,5208.85
+2026-01-01,B05,Connectivity & eBanking,1034.75
+2026-01-01,B06,Account maintenance,771.38
+2026-01-01,B06,Payments & collections,2089.82
+2026-01-01,B06,Connectivity & eBanking,393.5
+2026-01-01,B07,Account maintenance,994.38
+2026-01-01,B07,Payments & collections,2307.07
+2026-01-01,B07,Connectivity & eBanking,573.39
+2026-02-01,B01,Account maintenance,6366.69
+2026-02-01,B01,Payments & collections,13873.4
+2026-02-01,B01,Cash pooling,5338.35
+2026-02-01,B01,Connectivity & eBanking,3451.67
+2026-02-01,B02,Account maintenance,4166.07
+2026-02-01,B02,Payments & collections,9055.52
+2026-02-01,B02,Connectivity & eBanking,6330.54
+2026-02-01,B03,Account maintenance,3079.2
+2026-02-01,B03,Payments & collections,9047.27
+2026-02-01,B03,Connectivity & eBanking,2078.68
+2026-02-01,B04,Account maintenance,4131.19
+2026-02-01,B04,Payments & collections,9605.32
+2026-02-01,B04,Cash pooling,2010.45
+2026-02-01,B04,Connectivity & eBanking,1892.97
+2026-02-01,B05,Account maintenance,2009.47
+2026-02-01,B05,Payments & collections,4622.65
+2026-02-01,B05,Connectivity & eBanking,953.26
+2026-02-01,B06,Account maintenance,807.13
+2026-02-01,B06,Payments & collections,2358.65
+2026-02-01,B06,Connectivity & eBanking,421.75
+2026-02-01,B07,Account maintenance,938.87
+2026-02-01,B07,Payments & collections,2433.31
+2026-02-01,B07,Connectivity & eBanking,578.96
+2026-03-01,B01,Account maintenance,5949.39
+2026-03-01,B01,Payments & collections,12670.54
+2026-03-01,B01,Cash pooling,4900.14
+2026-03-01,B01,Connectivity & eBanking,3313.07
+2026-03-01,B02,Account maintenance,3928.23
+2026-03-01,B02,Payments & collections,10389.67
+2026-03-01,B02,Connectivity & eBanking,5568.16
+2026-03-01,B03,Account maintenance,2860.84
+2026-03-01,B03,Payments & collections,9086.64
+2026-03-01,B03,Connectivity & eBanking,2051.22
+2026-03-01,B04,Account maintenance,3951.62
+2026-03-01,B04,Payments & collections,9288.19
+2026-03-01,B04,Cash pooling,2021.66
+2026-03-01,B04,Connectivity & eBanking,1983.96
+2026-03-01,B05,Account maintenance,2066.04
+2026-03-01,B05,Payments & collections,4778.2
+2026-03-01,B05,Connectivity & eBanking,1064.63
+2026-03-01,B06,Account maintenance,786.01
+2026-03-01,B06,Payments & collections,2334.24
+2026-03-01,B06,Connectivity & eBanking,416.06
+2026-03-01,B07,Account maintenance,949.23
+2026-03-01,B07,Payments & collections,2375.45
+2026-03-01,B07,Connectivity & eBanking,565.06
+2026-04-01,B01,Account maintenance,6196.89
+2026-04-01,B01,Payments & collections,12276.51
+2026-04-01,B01,Cash pooling,5083.75
+2026-04-01,B01,Connectivity & eBanking,3507.18
+2026-04-01,B02,Account maintenance,4005.38
+2026-04-01,B02,Payments & collections,9519.26
+2026-04-01,B02,Connectivity & eBanking,5810.55
+2026-04-01,B03,Account maintenance,2924.67
+2026-04-01,B03,Payments & collections,9764.54
+2026-04-01,B03,Connectivity & eBanking,2037.47
+2026-04-01,B04,Account maintenance,4053.74
+2026-04-01,B04,Payments & collections,9596.6
+2026-04-01,B04,Cash pooling,1943.14
+2026-04-01,B04,Connectivity & eBanking,1965.39
+2026-04-01,B05,Account maintenance,1969.81
+2026-04-01,B05,Payments & collections,5003.11
+2026-04-01,B05,Connectivity & eBanking,1004.5
+2026-04-01,B06,Account maintenance,815.34
+2026-04-01,B06,Payments & collections,2428.83
+2026-04-01,B06,Connectivity & eBanking,376.78
+2026-04-01,B07,Account maintenance,989.26
+2026-04-01,B07,Payments & collections,2453.94
+2026-04-01,B07,Connectivity & eBanking,620.59
+2026-05-01,B01,Account maintenance,6124.64
+2026-05-01,B01,Payments & collections,13748.65
+2026-05-01,B01,Cash pooling,4633.62
+2026-05-01,B01,Connectivity & eBanking,3401.63
+2026-05-01,B02,Account maintenance,3977.01
+2026-05-01,B02,Payments & collections,9582.25
+2026-05-01,B02,Connectivity & eBanking,5578.46
+2026-05-01,B03,Account maintenance,3026.74
+2026-05-01,B03,Payments & collections,8526.94
+2026-05-01,B03,Connectivity & eBanking,1913.8
+2026-05-01,B04,Account maintenance,4123.97
+2026-05-01,B04,Payments & collections,9099.47
+2026-05-01,B04,Cash pooling,2108.54
+2026-05-01,B04,Connectivity & eBanking,2061.72
+2026-05-01,B05,Account maintenance,2004.38
+2026-05-01,B05,Payments & collections,4672.6
+2026-05-01,B05,Connectivity & eBanking,1014.71
+2026-05-01,B06,Account maintenance,788.56
+2026-05-01,B06,Payments & collections,2135.16
+2026-05-01,B06,Connectivity & eBanking,395.24
+2026-05-01,B07,Account maintenance,1034.42
+2026-05-01,B07,Payments & collections,2772.38
+2026-05-01,B07,Connectivity & eBanking,599.2
+2026-06-01,B01,Account maintenance,5743.57
+2026-06-01,B01,Payments & collections,12557.26
+2026-06-01,B01,Cash pooling,5161.21
+2026-06-01,B01,Connectivity & eBanking,3083.07
+2026-06-01,B02,Account maintenance,4131.01
+2026-06-01,B02,Payments & collections,9718.3
+2026-06-01,B02,Connectivity & eBanking,6089.64
+2026-06-01,B03,Account maintenance,2881.41
+2026-06-01,B03,Payments & collections,9378.78
+2026-06-01,B03,Connectivity & eBanking,2007.35
+2026-06-01,B04,Account maintenance,3971.14
+2026-06-01,B04,Payments & collections,8524.01
+2026-06-01,B04,Cash pooling,2036.12
+2026-06-01,B04,Connectivity & eBanking,1978.6
+2026-06-01,B05,Account maintenance,2093.41
+2026-06-01,B05,Payments & collections,4527.12
+2026-06-01,B05,Connectivity & eBanking,1008.6
+2026-06-01,B06,Account maintenance,761.29
+2026-06-01,B06,Payments & collections,2233.82
+2026-06-01,B06,Connectivity & eBanking,395.06
+2026-06-01,B07,Account maintenance,1000.28
+2026-06-01,B07,Payments & collections,2474.29
+2026-06-01,B07,Connectivity & eBanking,601.07
+2026-07-01,B01,Account maintenance,5633.77
+2026-07-01,B01,Payments & collections,14387.25
+2026-07-01,B01,Cash pooling,5104.24
+2026-07-01,B01,Connectivity & eBanking,3186.29
+2026-07-01,B02,Account maintenance,3824.29
+2026-07-01,B02,Payments & collections,9039.24
+2026-07-01,B02,Connectivity & eBanking,5718.44
+2026-07-01,B03,Account maintenance,2847.9
+2026-07-01,B03,Payments & collections,8818.3
+2026-07-01,B03,Connectivity & eBanking,2176.85
+2026-07-01,B04,Account maintenance,4098.29
+2026-07-01,B04,Payments & collections,8877.49
+2026-07-01,B04,Cash pooling,2113.47
+2026-07-01,B04,Connectivity & eBanking,2038.37
+2026-07-01,B05,Account maintenance,1980.26
+2026-07-01,B05,Payments & collections,5399.81
+2026-07-01,B05,Connectivity & eBanking,1017.8
+2026-07-01,B06,Account maintenance,793.83
+2026-07-01,B06,Payments & collections,2332.55
+2026-07-01,B06,Connectivity & eBanking,421.03
+2026-07-01,B07,Account maintenance,990.99
+2026-07-01,B07,Payments & collections,2258.58
+2026-07-01,B07,Connectivity & eBanking,610.42
+2026-08-01,B01,Account maintenance,5713.43
+2026-08-01,B01,Payments & collections,14279.41
+2026-08-01,B01,Cash pooling,4871.78
+2026-08-01,B01,Connectivity & eBanking,3454.15
+2026-08-01,B02,Account maintenance,3873.79
+2026-08-01,B02,Payments & collections,10654.46
+2026-08-01,B02,Connectivity & eBanking,6072.63
+2026-08-01,B03,Account maintenance,3022.38
+2026-08-01,B03,Payments & collections,8318.61
+2026-08-01,B03,Connectivity & eBanking,2061.39
+2026-08-01,B04,Account maintenance,4110.44
+2026-08-01,B04,Payments & collections,8643.95
+2026-08-01,B04,Cash pooling,1996.79
+2026-08-01,B04,Connectivity & eBanking,1996.15
+2026-08-01,B05,Account maintenance,2055.82
+2026-08-01,B05,Payments & collections,5789.3
+2026-08-01,B05,Connectivity & eBanking,975.9
+2026-08-01,B06,Account maintenance,774.73
+2026-08-01,B06,Payments & collections,2410.14
+2026-08-01,B06,Connectivity & eBanking,406.25
+2026-08-01,B07,Account maintenance,1018.57
+2026-08-01,B07,Payments & collections,2563.75
+2026-08-01,B07,Connectivity & eBanking,605.39
+2026-09-01,B01,Account maintenance,5892.12
+2026-09-01,B01,Payments & collections,15131.45
+2026-09-01,B01,Cash pooling,4902.01
+2026-09-01,B01,Connectivity & eBanking,3363.83
+2026-09-01,B02,Account maintenance,3936.81
+2026-09-01,B02,Payments & collections,9900.2
+2026-09-01,B02,Connectivity & eBanking,6056.98
+2026-09-01,B03,Account maintenance,3083.6
+2026-09-01,B03,Payments & collections,9066.81
+2026-09-01,B03,Connectivity & eBanking,2077.42
+2026-09-01,B04,Account maintenance,4078.89
+2026-09-01,B04,Payments & collections,7483.16
+2026-09-01,B04,Cash pooling,2035.03
+2026-09-01,B04,Connectivity & eBanking,2042.87
+2026-09-01,B05,Account maintenance,2062.44
+2026-09-01,B05,Payments & collections,4615.91
+2026-09-01,B05,Connectivity & eBanking,1021.32
+2026-09-01,B06,Account maintenance,784.44
+2026-09-01,B06,Payments & collections,2321.92
+2026-09-01,B06,Connectivity & eBanking,414.81
+2026-09-01,B07,Account maintenance,989.5
+2026-09-01,B07,Payments & collections,2420.29
+2026-09-01,B07,Connectivity & eBanking,584.86
