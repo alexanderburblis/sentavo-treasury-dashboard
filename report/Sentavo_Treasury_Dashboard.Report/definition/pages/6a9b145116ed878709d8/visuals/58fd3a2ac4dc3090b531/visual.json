@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "58fd3a2ac4dc3090b531",
+  "position": {
+    "x": 760,
+    "y": 14,
+    "z": 3000,
+    "height": 90,
+    "width": 240,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "FX Cost CHF"
+                }
+              },
+              "queryRef": "_Measures.FX Cost CHF",
+              "nativeQueryRef": "FX Cost CHF",
+              "displayName": "Spread cost (half spread)"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

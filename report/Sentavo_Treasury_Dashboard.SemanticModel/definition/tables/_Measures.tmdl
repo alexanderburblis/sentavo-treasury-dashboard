@@ -666,6 +666,78 @@ table _Measures
 		displayFolder: 4 Budget vs actual
 		lineageTag: 067d694e-a77d-4991-a55e-ebd9a53bd7a4
 
+	measure 'FX Volume CHF' = SUM ( FactFXDeals[Notional_CHF] )
+		formatString: #,0.0
+		displayFolder: 9 FX execution
+		lineageTag: bdbf8578-2cbc-4d5c-b619-8fe3d1b35f61
+
+	measure 'FX Deals' = COUNTROWS ( FactFXDeals )
+		formatString: #,0
+		displayFolder: 9 FX execution
+		lineageTag: 9933090a-9133-46dc-9783-8afbdafe8a43
+
+	/// Bid-ask spread weighted by CHF notional.
+	measure 'FX Spread bps' = DIVIDE ( SUMX ( FactFXDeals, FactFXDeals[Notional_CHF] * FactFXDeals[Spread_bps] ), SUM ( FactFXDeals[Notional_CHF] ) )
+		formatString: 0.00
+		displayFolder: 9 FX execution
+		lineageTag: 100214ac-ebbe-406c-a6d0-3d397b657e82
+
+	/// Half the spread on each deal, the same basis as FX cost in the treasury P&L.
+	measure 'FX Cost CHF' = SUMX ( FactFXDeals, FactFXDeals[Notional_CHF] * FactFXDeals[Spread_bps] / 2 / 10000 )
+		formatString: #,0
+		displayFolder: 9 FX execution
+		lineageTag: b2602f19-017a-4131-904a-0f01bbad509a
+
+	measure 'FX Platform Share %' = DIVIDE ( CALCULATE ( [FX Volume CHF], FactFXDeals[ExecutionChannel] = "Multi-bank platform" ), [FX Volume CHF] )
+		formatString: 0.0%
+		displayFolder: 9 FX execution
+		lineageTag: 11da001e-e31d-4775-8511-207220837413
+
+	measure 'FX Share of Wallet %' = DIVIDE ( [FX Volume CHF], CALCULATE ( [FX Volume CHF], REMOVEFILTERS ( DimBank ) ) )
+		formatString: 0.0%
+		displayFolder: 9 FX execution
+		lineageTag: 8c6492cc-742f-4ab1-a27b-a9a85c545a86
+
+	/// Forecast error of the 13-week-ahead forecast, per week or period in context.
+	measure 'WAPE 13W %' = CALCULATE ( [Forecast WAPE %], FactCashForecast[HorizonWeeks] = 13 )
+		formatString: 0.0%
+		displayFolder: 3 Forecast
+		lineageTag: 2efeb8e4-086d-45a7-bc8a-53eff22ae313
+
+	measure 'WAPE 1W %' = CALCULATE ( [Forecast WAPE %], FactCashForecast[HorizonWeeks] = 1 )
+		formatString: 0.0%
+		displayFolder: 3 Forecast
+		lineageTag: e1f17df8-5efa-45bb-ae76-bae3eff804a3
+
+	measure 'Selected Bank' = SELECTEDVALUE ( DimBank[BankLabel], "All banks" )
+		displayFolder: 2 Counterparty risk\Tooltip
+		lineageTag: e7def0e5-9c6b-489e-947d-a134fd69a7fa
+
+	measure 'Bank Rating Outlook' = SELECTEDVALUE ( DimBank[Rating] ) & ", " & LOWER ( SELECTEDVALUE ( DimBank[Outlook] ) ) & " outlook"
+		displayFolder: 2 Counterparty risk\Tooltip
+		lineageTag: 2480e60f-cbe4-4032-9fb0-a7c8df7c07be
+
+	/// Business days over the limit across the whole period, whatever date is in context.
+	measure 'Days Over Limit Total' = CALCULATE ( [Days Over Limit], REMOVEFILTERS ( 'Date' ) ) + 0
+		formatString: 0
+		displayFolder: 2 Counterparty risk\Tooltip
+		lineageTag: ca31e49b-a2e0-411f-a0ef-556007e575e7
+
+	measure 'Tooltip Date' = FORMAT ( MAX ( FactLiquidityPosition[Date] ), "d mmm yyyy" )
+		displayFolder: 2 Counterparty risk\Tooltip
+		lineageTag: 13afe04a-98f2-4a7a-8eee-5ed0079fa191
+
+	/// FX volume in CHF millions, for tables.
+	measure 'FX Volume CHF m' = DIVIDE ( [FX Volume CHF], 1e6 )
+		formatString: #,0.0
+		displayFolder: 9 FX execution
+		lineageTag: d5dbf672-92de-432d-9fc7-550a8b341ca3
+
+	/// Dynamic title for the Bank Detail page.
+	measure 'Bank Detail Title' = [Selected Bank] & ": monthly fees (CHF)"
+		displayFolder: 2 Counterparty risk\Tooltip
+		lineageTag: a9e45660-20c3-4ed1-8555-6cc1f3998939
+
 	column Column1
 		dataType: string
 		lineageTag: 67a18a03-ae0c-44f8-b9be-a87e084aea8d

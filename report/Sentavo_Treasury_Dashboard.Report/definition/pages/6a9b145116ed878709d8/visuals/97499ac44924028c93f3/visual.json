@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "97499ac44924028c93f3",
+  "position": {
+    "x": 512,
+    "y": 14,
+    "z": 2000,
+    "height": 90,
+    "width": 240,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "FX Spread bps"
+                }
+              },
+              "queryRef": "_Measures.FX Spread bps",
+              "nativeQueryRef": "FX Spread bps",
+              "displayName": "Average spread (bps)"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

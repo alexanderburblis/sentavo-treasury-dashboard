@@ -51,7 +51,7 @@ table FactBankIssues
 
 	column OpenDate
 		dataType: dateTime
-		formatString: Long Date
+		formatString: dd mmm yyyy
 		lineageTag: 5a33e5a1-9919-4c4f-8fc7-76211c9dc5a6
 		summarizeBy: none
 		sourceColumn: OpenDate
@@ -59,6 +59,8 @@ table FactBankIssues
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
 
 	column CloseDate
 		dataType: dateTime

@@ -6,11 +6,11 @@
     "y": 116,
     "z": 4000,
     "height": 260,
-    "width": 1248,
+    "width": 620,
     "tabOrder": 4000
   },
   "visual": {
-    "visualType": "columnChart",
+    "visualType": "lineChart",
     "query": {
       "queryState": {
         "Category": {
@@ -23,30 +23,12 @@
                       "Entity": "Date"
                     }
                   },
-                  "Property": "Month"
+                  "Property": "MonthStart"
                 }
               },
-              "queryRef": "Date.Month",
-              "nativeQueryRef": "Month",
+              "queryRef": "Date.MonthStart",
+              "nativeQueryRef": "MonthStart",
               "active": true
-            }
-          ]
-        },
-        "Series": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "FactBankFees"
-                    }
-                  },
-                  "Property": "FeeCategory"
-                }
-              },
-              "queryRef": "FactBankFees.FeeCategory",
-              "nativeQueryRef": "FeeCategory"
             }
           ]
         },
@@ -79,7 +61,7 @@
                     "Entity": "Date"
                   }
                 },
-                "Property": "Month"
+                "Property": "MonthStart"
               }
             },
             "direction": "Ascending"
@@ -89,16 +71,65 @@
       }
     },
     "objects": {
-      "categoryAxis": [
+      "dataPoint": [
         {
           "properties": {
-            "axisType": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Categorical'"
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#00B8F5'"
+                    }
+                  }
                 }
               }
             }
+          }
+        }
+      ],
+      "anomalyDetection": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "displayName": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Find anomalies 1'"
+                }
+              }
+            },
+            "transform": {
+              "algorithm": "SampleAndDetectAnomaly",
+              "parameters": [
+                {
+                  "Literal": {
+                    "Value": "0.7D"
+                  },
+                  "Name": "Sensitivity"
+                },
+                {
+                  "Literal": {
+                    "Value": "3500L"
+                  },
+                  "Name": "SampleSizePerSeries"
+                }
+              ]
+            },
+            "explainBy": {
+              "exprs": [],
+              "kind": "ExprList"
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.Fees CHF",
+            "id": "1"
           }
         }
       ]
@@ -116,8 +147,33 @@
             },
             "text": {
               "expr": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Bank Detail Title"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
                 "Literal": {
-                  "Value": "'Monthly fees by category (CHF)'"
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Anomaly detection flags months outside the expected range'"
                 }
               }
             }

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "9322443fa9f39feb77a7",
+  "position": {
+    "x": 1008,
+    "y": 14,
+    "z": 4000,
+    "height": 90,
+    "width": 256,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "FX Platform Share %"
+                }
+              },
+              "queryRef": "_Measures.FX Platform Share %",
+              "nativeQueryRef": "FX Platform Share %",
+              "displayName": "Volume on the platform"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

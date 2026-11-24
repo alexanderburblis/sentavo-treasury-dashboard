@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "b3577f03d613f2039197",
   "position": {
-    "x": 16,
-    "y": 528,
+    "x": 856,
+    "y": 446,
     "z": 6000,
-    "height": 176,
-    "width": 1248,
+    "height": 258,
+    "width": 408,
     "tabOrder": 6000
   },
   "visual": {
@@ -31,7 +31,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "The headline figures are calculated three times, independently: in DAX in this report, in SQL (DuckDB views in sql/, run by src/run_sql_checks.py) and in pandas (src/reconcile_dashboard.py). pytest compares SQL and pandas with each other and with the figures in the README, so the README cannot drift from the data without a test failing.",
+                    "value": "Every headline figure is calculated three times, independently: in DAX in this report, in SQL (DuckDB views in sql/, run by src/run_sql_checks.py) and in pandas (src/reconcile_dashboard.py).",
                     "textStyle": {
                       "fontSize": "10pt",
                       "color": "#C9D4E8"
@@ -42,7 +42,18 @@
               {
                 "textRuns": [
                   {
-                    "value": "The same key, value and security checks run here at refresh and in sql/06_data_quality.sql.",
+                    "value": "pytest compares SQL and pandas with each other and with the figures in the README, so the README cannot drift from the data without a test failing.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#C9D4E8"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "The key, value and security checks on the left also run in sql/06_data_quality.sql.",
                     "textStyle": {
                       "fontSize": "10pt",
                       "color": "#C9D4E8"

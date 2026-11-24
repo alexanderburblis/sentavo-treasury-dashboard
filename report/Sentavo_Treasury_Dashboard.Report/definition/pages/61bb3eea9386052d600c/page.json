@@ -4,5 +4,51 @@
   "displayName": "Treasury Control Tower",
   "displayOption": "FitToPage",
   "height": 720,
-  "width": 1280
+  "width": 1280,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "bm0bankfilter000001",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DimBank"
+              }
+            },
+            "Property": "BankLabel"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "bm0quarterfilter001",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Date"
+              }
+            },
+            "Property": "Quarter"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "bm0entityfilter0001",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DimEntity"
+              }
+            },
+            "Property": "EntityName"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
 }

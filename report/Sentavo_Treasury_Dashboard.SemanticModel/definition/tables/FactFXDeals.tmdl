@@ -136,6 +136,26 @@ table FactFXDeals
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Deal size band, sorted from small to large.
+	column 'Deal Size' = FactFXDeals[DealSizeBand]
+		dataType: string
+		lineageTag: 4746dde9-54fd-4173-921c-0bcd5f74c984
+		summarizeBy: none
+		sortByColumn: 'Deal Size Sort'
+
+	column 'Deal Size Sort' =
+			SWITCH (
+			    FactFXDeals[DealSizeBand],
+			    "< CHF 1m", 1,
+			    "> CHF 10m", 4,
+			    IF ( LEFT ( FactFXDeals[DealSizeBand], 5 ) = "CHF 1", 2, 3 )
+			)
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8a57c3aa-e209-4c17-b623-25c81fbcc191
+		summarizeBy: none
+
 	partition FactFXDeals = m
 		mode: import
 		source =

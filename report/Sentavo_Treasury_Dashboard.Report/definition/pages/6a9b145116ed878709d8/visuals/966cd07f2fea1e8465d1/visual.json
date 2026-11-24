@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "966cd07f2fea1e8465d1",
+  "position": {
+    "x": 16,
+    "y": 14,
+    "z": 0,
+    "height": 90,
+    "width": 240,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "FX Volume CHF"
+                }
+              },
+              "queryRef": "_Measures.FX Volume CHF",
+              "nativeQueryRef": "FX Volume CHF",
+              "displayName": "FX volume"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

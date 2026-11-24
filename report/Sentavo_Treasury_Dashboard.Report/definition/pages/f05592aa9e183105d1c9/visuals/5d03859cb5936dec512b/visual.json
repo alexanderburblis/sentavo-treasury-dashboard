@@ -3,9 +3,9 @@
   "name": "5d03859cb5936dec512b",
   "position": {
     "x": 16,
-    "y": 388,
+    "y": 424,
     "z": 5000,
-    "height": 316,
+    "height": 280,
     "width": 1248,
     "tabOrder": 5000
   },
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "FactBankIssues.IssueID",
-              "nativeQueryRef": "IssueID"
+              "nativeQueryRef": "IssueID",
+              "displayName": "Issue"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "FactBankIssues.OpenDate",
-              "nativeQueryRef": "OpenDate"
+              "nativeQueryRef": "OpenDate",
+              "displayName": "Opened"
             },
             {
               "field": {
@@ -111,7 +113,8 @@
                 }
               },
               "queryRef": "FactBankIssues.ResolutionDays",
-              "nativeQueryRef": "ResolutionDays"
+              "nativeQueryRef": "ResolutionDays",
+              "displayName": "Days to resolve"
             }
           ]
         }
