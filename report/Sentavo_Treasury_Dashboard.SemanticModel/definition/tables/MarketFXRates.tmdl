@@ -1,0 +1,46 @@
+table MarketFXRates
+	lineageTag: 6df67b8f-f630-4319-8f62-e80ee208caa4
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 26e97bd8-424a-4924-8a33-d90367de3625
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CurrencyCode
+		dataType: string
+		lineageTag: 8fd2502d-287f-4e93-9e47-07b28884757f
+		summarizeBy: none
+		sourceColumn: CurrencyCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column CHF_per_unit
+		dataType: double
+		formatString: 0.00000
+		lineageTag: a35b0afa-1d1f-41f0-b292-2c84cf8b7df5
+		summarizeBy: none
+		sourceColumn: CHF_per_unit
+
+		annotation SummarizationSetBy = Automatic
+
+	partition MarketFXRates = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    MarketFXRates_Sheet = Source{[Item="MarketFXRates",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(MarketFXRates_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"CurrencyCode", type text}, {"CHF_per_unit", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

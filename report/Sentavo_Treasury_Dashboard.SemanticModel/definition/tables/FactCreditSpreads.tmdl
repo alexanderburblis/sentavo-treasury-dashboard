@@ -1,0 +1,47 @@
+table FactCreditSpreads
+	lineageTag: 7b53d2c1-9ec2-4942-8ba0-328f3a525810
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: bbc9d223-f0e3-46c5-820f-0a1e2c021b4a
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column BankKey
+		dataType: string
+		lineageTag: dfe36d09-c10c-4185-a2b9-63f552cc3995
+		summarizeBy: none
+		sourceColumn: BankKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CreditSpread_bps
+		dataType: double
+		lineageTag: 2beb6e61-d4b8-4220-b667-0a60a705ad59
+		summarizeBy: sum
+		sourceColumn: CreditSpread_bps
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition FactCreditSpreads = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    FactCreditSpreads_Sheet = Source{[Item="FactCreditSpreads",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(FactCreditSpreads_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"BankKey", type text}, {"CreditSpread_bps", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,50 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["DimBank","MarketFXRates","MarketBenchmarkRates","FactMMFYield","FactTermDeposits","FactLiquidityPosition","FactFXDeals","FactDepositQuotes","FactCreditSpreads","FactCashForecast","FactBankIssues","FactBankFees","DimFund","DimCurrency","DimEntity","_Measures","DimScenario","FactTreasuryPnL","SecurityUserEntity","DataFile"]
+
+annotation PBI_ProTooling = ["DaxQueryView_Desktop","TMDLView_Desktop","DevMode"]
+
+ref table DateTableTemplate_f952bba5-2499-498c-98bf-9a6390337c33
+ref table DimBank
+ref table MarketFXRates
+ref table MarketBenchmarkRates
+ref table FactMMFYield
+ref table FactTermDeposits
+ref table FactLiquidityPosition
+ref table FactFXDeals
+ref table LocalDateTable_8202678f-b7a2-4b25-b00f-d7b0e1c30687
+ref table FactDepositQuotes
+ref table FactCreditSpreads
+ref table FactCashForecast
+ref table FactBankIssues
+ref table FactBankFees
+ref table DimFund
+ref table DimCurrency
+ref table DimEntity
+ref table Date
+ref table LocalDateTable_decb9eb0-5e14-4889-bb65-ec679d727b48
+ref table LocalDateTable_a0692d4b-85bf-4673-97b0-60cd0abb5140
+ref table _Measures
+ref table DimScenario
+ref table FactTreasuryPnL
+ref table SecurityUserEntity
+ref table 'Data Quality Checks'
+ref table Reconciliation
+ref table 'Scenario View'
+ref table 'Commentary Lines'
+
+ref role 'Entity CFO - Poland'
+ref role 'Entity CFO (dynamic)'
+
+ref cultureInfo en-US
+

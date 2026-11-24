@@ -1,0 +1,156 @@
+relationship 92c86139-808e-44ba-a50a-e0bd694aad66
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FactFXDeals.ValueDate
+	toColumn: LocalDateTable_8202678f-b7a2-4b25-b00f-d7b0e1c30687.Date
+
+relationship AutoDetected_74f2e7cc-7692-401d-ab5b-73eb9cf04ea2
+	fromColumn: FactTermDeposits.BankKey
+	toColumn: DimBank.BankKey
+
+relationship AutoDetected_ca1819b5-7cdd-43a8-8b49-9cfccebbff4b
+	fromColumn: FactFXDeals.BankKey
+	toColumn: DimBank.BankKey
+
+relationship AutoDetected_e6637f3f-0ce6-4380-89f9-388cd0553a2f
+	fromColumn: FactDepositQuotes.BankKey
+	toColumn: DimBank.BankKey
+
+relationship AutoDetected_311911a7-8a23-4a1a-9a4d-6c532ba36a7f
+	fromColumn: FactCreditSpreads.BankKey
+	toColumn: DimBank.BankKey
+
+relationship AutoDetected_81b18a08-2e5e-4652-863a-67f036de2360
+	fromColumn: FactBankIssues.BankKey
+	toColumn: DimBank.BankKey
+
+relationship 5c681fa0-42f8-44ad-9296-b1493922392a
+	fromColumn: FactLiquidityPosition.Date
+	toColumn: Date.Date
+
+relationship 833e9b58-59ee-1224-d5e4-b3da86edc42e
+	fromColumn: FactMMFYield.DateFixed
+	toColumn: Date.Date
+
+relationship ccf14628-cc36-4bb8-7a9f-1c833df73553
+	fromColumn: FactCreditSpreads.Date
+	toColumn: Date.Date
+
+relationship c24958f1-d7d6-c1b3-2d72-9772deba3305
+	fromColumn: FactFXDeals.TradeDate
+	toColumn: Date.Date
+
+relationship fc844613-8b78-af2b-8bbb-aeecd6f779bd
+	fromColumn: FactBankIssues.OpenDate
+	toColumn: Date.Date
+
+relationship 6977cc35-51e7-0cca-db53-deee543354e3
+	fromColumn: FactTermDeposits.StartDate
+	toColumn: Date.Date
+
+relationship 4e27330f-24bd-69ac-c63d-1ce49dd5198d
+	fromColumn: FactBankFees.FeeMonth
+	toColumn: Date.Date
+
+relationship a902a662-eab2-a20d-6710-0e2b0ea0e5cb
+	fromColumn: FactDepositQuotes.QuoteMonth
+	toColumn: Date.Date
+
+relationship ef6f615f-e2f9-4fe9-9cd5-07f467cef684
+	fromColumn: FactCashForecast.WeekStart
+	toColumn: Date.Date
+
+relationship bf48b08e-f48a-5ca2-77ef-63073d895c37
+	fromColumn: MarketBenchmarkRates.Date
+	toColumn: Date.Date
+
+relationship 62f3338a-f1df-5937-5445-1002c6630ae2
+	fromColumn: MarketFXRates.Date
+	toColumn: Date.Date
+
+relationship 45f607c5-4668-5272-c7ad-754d150469af
+	fromColumn: FactLiquidityPosition.BankKey
+	toColumn: DimBank.BankKey
+
+relationship 4b4b77e7-e039-8cb9-87db-53f250b696dd
+	fromColumn: FactBankFees.BankKey
+	toColumn: DimBank.BankKey
+
+relationship 70068614-c411-b3ec-b5cf-b0a2b93b0ad8
+	fromColumn: FactLiquidityPosition.EntityKey
+	toColumn: DimEntity.EntityKey
+
+relationship 123ec792-11ff-72b8-015c-f8a1102f18ec
+	fromColumn: FactTermDeposits.EntityKey
+	toColumn: DimEntity.EntityKey
+
+relationship 8198c5f7-b223-566f-9caa-07fc908e4949
+	fromColumn: FactFXDeals.EntityKey
+	toColumn: DimEntity.EntityKey
+
+relationship af08702b-44c9-63ca-402f-acf2100b3cca
+	fromColumn: FactBankIssues.EntityKey
+	toColumn: DimEntity.EntityKey
+
+relationship d9079cfd-eb44-0365-4ef7-3af1343dbafa
+	fromColumn: FactCashForecast.EntityKey
+	toColumn: DimEntity.EntityKey
+
+relationship 0944fff7-2778-4dff-59c2-d2a002a99cda
+	fromColumn: FactLiquidityPosition.FundKey
+	toColumn: DimFund.FundKey
+
+relationship b1672dfb-51a1-eb16-620f-0dabb2ec3e36
+	fromColumn: FactMMFYield.FundKey
+	toColumn: DimFund.FundKey
+
+relationship cfd2eb62-ca1c-f186-de1d-6746f6d60971
+	fromColumn: FactLiquidityPosition.Currency
+	toColumn: DimCurrency.CurrencyCode
+
+relationship 42be507c-76ef-bb41-1f79-ba38f17610ef
+	fromColumn: FactTermDeposits.Currency
+	toColumn: DimCurrency.CurrencyCode
+
+relationship 20368ec3-82e3-41c5-4d2f-d683a2e1fcb0
+	fromColumn: FactDepositQuotes.Currency
+	toColumn: DimCurrency.CurrencyCode
+
+relationship 48790fd5-8661-171a-7c97-31d550d61b06
+	fromColumn: MarketBenchmarkRates.Currency
+	toColumn: DimCurrency.CurrencyCode
+
+relationship 434c1a9a-0e80-6b2f-5e87-24c2d9d60644
+	fromColumn: MarketFXRates.CurrencyCode
+	toColumn: DimCurrency.CurrencyCode
+
+relationship 23507b36-3b74-471d-ab06-5296053894b3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FactBankIssues.CloseDate
+	toColumn: LocalDateTable_decb9eb0-5e14-4889-bb65-ec679d727b48.Date
+
+relationship af76ab64-fbec-4449-a85f-85b1e81f72b0
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FactTermDeposits.MaturityDate
+	toColumn: LocalDateTable_a0692d4b-85bf-4673-97b0-60cd0abb5140.Date
+
+relationship rel_PnL_Date
+	fromColumn: FactTreasuryPnL.Month
+	toColumn: Date.Date
+
+relationship rel_PnL_Entity
+	fromColumn: FactTreasuryPnL.EntityKey
+	toColumn: DimEntity.EntityKey
+
+relationship rel_PnL_Bank
+	fromColumn: FactTreasuryPnL.BankKey
+	toColumn: DimBank.BankKey
+
+relationship rel_PnL_Scenario
+	fromColumn: FactTreasuryPnL.Scenario
+	toColumn: DimScenario.Scenario
+
+relationship rel_Deposits_MaturityDate
+	isActive: false
+	fromColumn: FactTermDeposits.MaturityDate
+	toColumn: Date.Date
+

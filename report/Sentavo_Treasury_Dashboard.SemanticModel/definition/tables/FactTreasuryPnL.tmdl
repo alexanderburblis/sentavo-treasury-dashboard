@@ -1,0 +1,61 @@
+/// Monthly treasury P&L: interest income, bank fees and FX cost. Actual, budget and the Q1 and Q2 reforecasts. Income positive, cost negative.
+table FactTreasuryPnL
+	lineageTag: 3473a963-e75b-4fae-a04c-95555ecfff33
+
+	column Month
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: bddefacb-6819-4acc-bd16-ca33f989ab39
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Scenario
+		dataType: string
+		lineageTag: 7178953a-cb4d-4f27-9e72-08cdbc31b0da
+		summarizeBy: none
+		sourceColumn: Scenario
+
+	column EntityKey
+		dataType: string
+		lineageTag: 5942f27b-33a1-44f9-859d-ee552295f462
+		summarizeBy: none
+		sourceColumn: EntityKey
+
+	column BankKey
+		dataType: string
+		lineageTag: 7c9d6d9f-98ec-4845-818c-8d2b29b0024b
+		summarizeBy: none
+		sourceColumn: BankKey
+
+	column Line
+		dataType: string
+		lineageTag: cc721145-c847-4cc1-b27c-1800087a9439
+		summarizeBy: none
+		sourceColumn: Line
+
+	column Category
+		dataType: string
+		lineageTag: 14d40a85-2b58-46e8-9d90-577c1ce882d3
+		summarizeBy: none
+		sourceColumn: Category
+
+	column Amount_CHF
+		dataType: double
+		formatString: #,0
+		lineageTag: a5f2719b-e627-4220-98c2-23681502f341
+		summarizeBy: none
+		sourceColumn: Amount_CHF
+
+	partition FactTreasuryPnL = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    Sheet = Source{[Item="FactTreasuryPnL",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Month", type date}, {"Scenario", type text}, {"EntityKey", type text}, {"BankKey", type text}, {"Line", type text}, {"Category", type text}, {"Amount_CHF", type number}})
+				in
+				    #"Changed Type"
+

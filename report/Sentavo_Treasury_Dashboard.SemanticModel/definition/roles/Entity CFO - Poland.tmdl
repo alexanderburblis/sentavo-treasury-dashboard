@@ -1,0 +1,7 @@
+role 'Entity CFO - Poland'
+	modelPermission: read
+
+	tablePermission DimEntity = DimEntity[EntityKey] = "SIG-PL01"
+
+	annotation PBI_Id = fe41ffa6cff54e9690da1198648c917f
+

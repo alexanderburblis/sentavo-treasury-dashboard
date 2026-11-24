@@ -1,0 +1,110 @@
+table FactBankIssues
+	lineageTag: fdbf4221-b5e4-4d98-a635-3d749ecd682c
+
+	column IssueID
+		dataType: string
+		lineageTag: ea21e81f-b32e-4ce0-bb59-6c0d3739d222
+		summarizeBy: none
+		sourceColumn: IssueID
+
+		annotation SummarizationSetBy = Automatic
+
+	column BankKey
+		dataType: string
+		lineageTag: 272da45d-f3a1-4c79-ae5b-e3bfb79a7c31
+		summarizeBy: none
+		sourceColumn: BankKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column EntityKey
+		dataType: string
+		lineageTag: d3c494b5-177e-4e55-9814-b7fa8d5fa9ea
+		summarizeBy: none
+		sourceColumn: EntityKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Area
+		dataType: string
+		lineageTag: 992689ea-45b8-48a4-9b30-172bc1a51a3d
+		summarizeBy: none
+		sourceColumn: Area
+
+		annotation SummarizationSetBy = Automatic
+
+	column Description
+		dataType: string
+		lineageTag: 639c5edf-2153-4540-91b7-59637b7ff471
+		summarizeBy: none
+		sourceColumn: Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column Severity
+		dataType: string
+		lineageTag: 43ed9cfc-bbe1-4b4b-af5a-36c1b8b3623c
+		summarizeBy: none
+		sourceColumn: Severity
+
+		annotation SummarizationSetBy = Automatic
+
+	column OpenDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 5a33e5a1-9919-4c4f-8fc7-76211c9dc5a6
+		summarizeBy: none
+		sourceColumn: OpenDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CloseDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 51a78d79-204a-49df-8c56-79a6ad4b52e0
+		summarizeBy: none
+		sourceColumn: CloseDate
+
+		variation Variation
+			isDefault
+			relationship: 23507b36-3b74-471d-ab06-5296053894b3
+			defaultHierarchy: LocalDateTable_decb9eb0-5e14-4889-bb65-ec679d727b48.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Status
+		dataType: string
+		lineageTag: c7ad147d-7db6-493b-a8a5-197dbf622f9a
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column ResolutionDays
+		dataType: int64
+		formatString: 0
+		lineageTag: 1682036b-1dbf-4c19-958e-a1843b5819a8
+		summarizeBy: sum
+		sourceColumn: ResolutionDays
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactBankIssues = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    FactBankIssues_Sheet = Source{[Item="FactBankIssues",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(FactBankIssues_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"IssueID", type text}, {"BankKey", type text}, {"EntityKey", type text}, {"Area", type text}, {"Description", type text}, {"Severity", type text}, {"OpenDate", type date}, {"CloseDate", type date}, {"Status", type text}, {"ResolutionDays", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,48 @@
+table FactMMFYield
+	lineageTag: 0f16b91d-c452-44c1-a2d9-894975f0eb4d
+
+	column DateFixed
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a2c7d6c6-23a9-4478-a85b-bc07c37b2914
+		summarizeBy: none
+		sourceColumn: DateFixed
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column FundKey
+		dataType: string
+		lineageTag: 458f0a28-69a4-419d-a2d9-0039daaa0354
+		summarizeBy: none
+		sourceColumn: FundKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Yield7d_pct
+		dataType: double
+		lineageTag: cb6c9c43-07c4-4370-bf31-9ad0797db446
+		summarizeBy: sum
+		sourceColumn: Yield7d_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition FactMMFYield = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    FactMMFYield_Sheet = Source{[Item="FactMMFYield",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(FactMMFYield_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"FundKey", type text}, {"Yield7d_pct", type number}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Date", "DateFixed"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

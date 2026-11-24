@@ -1,0 +1,144 @@
+table FactTermDeposits
+	lineageTag: 627032e1-88e6-4c52-b7a3-4449815cbb69
+
+	column DealID
+		dataType: string
+		lineageTag: 615f69f4-3b1d-45a6-b3fd-ebbde3f4e3f6
+		summarizeBy: none
+		sourceColumn: DealID
+
+		annotation SummarizationSetBy = Automatic
+
+	column EntityKey
+		dataType: string
+		lineageTag: 21d63dc8-b24e-4f8d-862c-479cefe0b4c6
+		summarizeBy: none
+		sourceColumn: EntityKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column BankKey
+		dataType: string
+		lineageTag: 0ad3cdea-5a25-4f35-86e9-88647f336285
+		summarizeBy: none
+		sourceColumn: BankKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Currency
+		dataType: string
+		lineageTag: 4f843fa7-80bd-4784-a4f8-90b111a4dbad
+		summarizeBy: none
+		sourceColumn: Currency
+
+		annotation SummarizationSetBy = Automatic
+
+	column Principal_LC
+		dataType: int64
+		formatString: 0
+		lineageTag: ab6364fe-f5f6-46e6-97b2-4727486f0b23
+		summarizeBy: sum
+		sourceColumn: Principal_LC
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 2ae26f5a-6100-4609-ab99-28fd87b46b50
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column MaturityDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 0a43568d-7640-466a-b238-b67068d8be92
+		summarizeBy: none
+		sourceColumn: MaturityDate
+
+		variation Variation
+			isDefault
+			relationship: af76ab64-fbec-4449-a85f-85b1e81f72b0
+			defaultHierarchy: LocalDateTable_a0692d4b-85bf-4673-97b0-60cd0abb5140.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Tenor
+		dataType: string
+		lineageTag: e016ebf4-bcc8-440e-8d1d-63759a1946a7
+		summarizeBy: none
+		sourceColumn: Tenor
+
+		annotation SummarizationSetBy = Automatic
+
+	column TenorMonths
+		dataType: int64
+		formatString: 0
+		lineageTag: 3c57e566-5b61-41ae-b760-022128ddf872
+		summarizeBy: sum
+		sourceColumn: TenorMonths
+
+		annotation SummarizationSetBy = Automatic
+
+	column InterestRate_pct
+		dataType: double
+		lineageTag: 5b7b11c2-2b3a-4a68-9dd5-3fbe60b8f1af
+		summarizeBy: sum
+		sourceColumn: InterestRate_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Interest_LC
+		dataType: double
+		lineageTag: 27946166-2bf8-48da-b624-c98edecce937
+		summarizeBy: sum
+		sourceColumn: Interest_LC
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Status
+		dataType: string
+		lineageTag: cf93524b-377a-4559-b422-6d6420d3d515
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Principal in CHF at the FX rate of the start date.
+	column Principal_CHF =
+			FactTermDeposits[Principal_LC]
+			    * LOOKUPVALUE (
+			        MarketFXRates[CHF_per_unit],
+			        MarketFXRates[Date], FactTermDeposits[StartDate],
+			        MarketFXRates[CurrencyCode], FactTermDeposits[Currency]
+			    )
+		dataType: double
+		formatString: #,0
+		lineageTag: d23355ee-6c24-47a9-8e63-4e8a4f0beb2d
+		summarizeBy: none
+
+	partition FactTermDeposits = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    FactTermDeposits_Sheet = Source{[Item="FactTermDeposits",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(FactTermDeposits_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"DealID", type text}, {"EntityKey", type text}, {"BankKey", type text}, {"Currency", type text}, {"Principal_LC", Int64.Type}, {"StartDate", type date}, {"MaturityDate", type date}, {"Tenor", type text}, {"TenorMonths", Int64.Type}, {"InterestRate_pct", type number}, {"Interest_LC", type number}, {"Status", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

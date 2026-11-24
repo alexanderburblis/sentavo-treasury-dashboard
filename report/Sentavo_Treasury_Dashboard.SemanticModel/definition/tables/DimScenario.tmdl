@@ -1,0 +1,36 @@
+/// Plan scenarios: Actual, Budget, Forecast Q1, Forecast Q2.
+table DimScenario
+	lineageTag: e79545a8-2f62-48c2-9c9f-fdedcb2efc0a
+
+	column Scenario
+		dataType: string
+		lineageTag: 3c797343-1219-401c-930d-5289820a81d6
+		summarizeBy: none
+		sourceColumn: Scenario
+		sortByColumn: ScenarioSort
+
+	column ScenarioSort
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 47303451-c371-40b1-be3f-5e193c33aaa5
+		summarizeBy: none
+		sourceColumn: ScenarioSort
+
+	column ScenarioType
+		dataType: string
+		lineageTag: 3a012998-9439-4d91-b3fc-764b6f6d84e0
+		summarizeBy: none
+		sourceColumn: ScenarioType
+
+	partition DimScenario = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    Sheet = Source{[Item="DimScenario",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Scenario", type text}, {"ScenarioSort", Int64.Type}, {"ScenarioType", type text}})
+				in
+				    #"Changed Type"
+

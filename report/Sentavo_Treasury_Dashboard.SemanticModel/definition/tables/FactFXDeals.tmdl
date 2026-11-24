@@ -1,0 +1,153 @@
+table FactFXDeals
+	lineageTag: 9994f569-6d02-4c67-a7bb-46b313438d86
+
+	column DealID
+		dataType: string
+		lineageTag: 964c76b6-ddfe-4f27-abd5-66ab54898243
+		summarizeBy: none
+		sourceColumn: DealID
+
+		annotation SummarizationSetBy = Automatic
+
+	column TradeDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 5027d402-bf2f-431a-b0fe-a4c127ff517a
+		summarizeBy: none
+		sourceColumn: TradeDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ValueDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 2b04d4c4-67f4-4a79-a207-34ac4d9d144d
+		summarizeBy: none
+		sourceColumn: ValueDate
+
+		variation Variation
+			isDefault
+			relationship: 92c86139-808e-44ba-a50a-e0bd694aad66
+			defaultHierarchy: LocalDateTable_8202678f-b7a2-4b25-b00f-d7b0e1c30687.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column EntityKey
+		dataType: string
+		lineageTag: e181b960-9e31-4288-9d5c-143e31921fef
+		summarizeBy: none
+		sourceColumn: EntityKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column BankKey
+		dataType: string
+		lineageTag: 5d7ba1be-b47e-4040-a3ff-d7445feb9f09
+		summarizeBy: none
+		sourceColumn: BankKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyPair
+		dataType: string
+		lineageTag: 6b468e47-229e-45cd-9a56-d0ed926461fc
+		summarizeBy: none
+		sourceColumn: CurrencyPair
+
+		annotation SummarizationSetBy = Automatic
+
+	column BaseCurrency
+		dataType: string
+		lineageTag: 354d58d0-553e-4adc-9b0d-05a7a09265d1
+		summarizeBy: none
+		sourceColumn: BaseCurrency
+
+		annotation SummarizationSetBy = Automatic
+
+	column DealType
+		dataType: string
+		lineageTag: b8de2dec-bc14-4a8e-b5c9-3c5ce3b40467
+		summarizeBy: none
+		sourceColumn: DealType
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tenor
+		dataType: string
+		lineageTag: e0a00860-9d0b-4abd-bd7a-50c2371c9e30
+		summarizeBy: none
+		sourceColumn: Tenor
+
+		annotation SummarizationSetBy = Automatic
+
+	column BuySell_Base
+		dataType: string
+		lineageTag: 8ac1eb7b-3ac8-4caf-b91b-adbd7ac496ec
+		summarizeBy: none
+		sourceColumn: BuySell_Base
+
+		annotation SummarizationSetBy = Automatic
+
+	column Notional_Base
+		dataType: int64
+		formatString: 0
+		lineageTag: 5cc6e59d-954f-4b51-820f-9993398c64bf
+		summarizeBy: sum
+		sourceColumn: Notional_Base
+
+		annotation SummarizationSetBy = Automatic
+
+	column Notional_CHF
+		dataType: int64
+		formatString: 0
+		lineageTag: afb5c4db-811a-4c93-b515-a912275bce67
+		summarizeBy: sum
+		sourceColumn: Notional_CHF
+
+		annotation SummarizationSetBy = Automatic
+
+	column Spread_bps
+		dataType: double
+		lineageTag: d1c62efe-c53a-49d9-8c66-3a731cf06923
+		summarizeBy: sum
+		sourceColumn: Spread_bps
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ExecutionChannel
+		dataType: string
+		lineageTag: 6f86fc61-2165-4e7f-b4ba-b27b14af7f67
+		summarizeBy: none
+		sourceColumn: ExecutionChannel
+
+		annotation SummarizationSetBy = Automatic
+
+	column DealSizeBand
+		dataType: string
+		lineageTag: 61a5dfcd-c9b4-4669-97a8-d924beb90521
+		summarizeBy: none
+		sourceColumn: DealSizeBand
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactFXDeals = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    FactFXDeals_Sheet = Source{[Item="FactFXDeals",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(FactFXDeals_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"DealID", type text}, {"TradeDate", type date}, {"ValueDate", type date}, {"EntityKey", type text}, {"BankKey", type text}, {"CurrencyPair", type text}, {"BaseCurrency", type text}, {"DealType", type text}, {"Tenor", type text}, {"BuySell_Base", type text}, {"Notional_Base", Int64.Type}, {"Notional_CHF", Int64.Type}, {"Spread_bps", type number}, {"ExecutionChannel", type text}, {"DealSizeBand", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

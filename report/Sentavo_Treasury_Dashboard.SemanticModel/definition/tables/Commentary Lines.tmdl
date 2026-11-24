@@ -1,0 +1,24 @@
+/// Row labels for the variance commentary table on the Budget vs Actual page.
+table 'Commentary Lines'
+	isHidden
+	lineageTag: ff98d18c-405b-4826-a7fc-3b4951b0a60b
+
+	column No
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 09a99965-2380-4b97-86d4-0eb25119f673
+		isNameInferred
+		sourceColumn: [No]
+
+	column Topic
+		dataType: string
+		lineageTag: aa895be5-4afd-4830-8a6e-a46988fee02e
+		isNameInferred
+		sourceColumn: [Topic]
+		sortByColumn: No
+
+	partition 'Commentary Lines' = calculated
+		mode: import
+		source = DATATABLE ( "No", INTEGER, "Topic", STRING, { { 1, "Result" }, { 2, "Driver" }, { 3, "Bank fees" } } )
+

@@ -1,0 +1,50 @@
+/// Data-quality checks, evaluated at refresh. Failures = 0 means the check passes.
+/// The same checks run in SQL (sql/06_data_quality.sql).
+table 'Data Quality Checks'
+	lineageTag: e500e81d-d3f4-4cf0-b6a5-5b7a85aedcc0
+
+	column Area
+		dataType: string
+		lineageTag: d986d0a6-e302-4f0e-87e6-1e83115d9c45
+		isNameInferred
+		sourceColumn: [Area]
+
+	column Check
+		dataType: string
+		lineageTag: f1df8d9b-8d8d-44a0-8445-bcc44a261fc4
+		isNameInferred
+		sourceColumn: [Check]
+
+	column Failures
+		dataType: int64
+		formatString: 0
+		lineageTag: 8839508c-01ae-4b91-8c4e-5c0002466396
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Failures]
+
+	column Result
+		dataType: string
+		lineageTag: d407725d-487d-4b2f-97ca-c5ee36e4a51c
+		isNameInferred
+		sourceColumn: [Result]
+
+	partition 'Data Quality Checks' = calculated
+		mode: import
+		source =
+				VAR _Checks =
+				    UNION (
+				        ROW ( "Area", "Keys", "Check", "Liquidity rows without a known entity", "Failures", COUNTROWS ( FILTER ( FactLiquidityPosition, ISBLANK ( RELATED ( DimEntity[EntityKey] ) ) ) ) + 0 ),
+				        ROW ( "Area", "Keys", "Check", "Liquidity rows without a known bank", "Failures", COUNTROWS ( FILTER ( FactLiquidityPosition, ISBLANK ( RELATED ( DimBank[BankKey] ) ) ) ) + 0 ),
+				        ROW ( "Area", "Keys", "Check", "Fund positions without a known fund", "Failures", COUNTROWS ( FILTER ( FactLiquidityPosition, FactLiquidityPosition[CounterpartyType] = "Fund" && ISBLANK ( RELATED ( DimFund[FundKey] ) ) ) ) + 0 ),
+				        ROW ( "Area", "Keys", "Check", "FX deals without a known bank", "Failures", COUNTROWS ( FILTER ( FactFXDeals, ISBLANK ( RELATED ( DimBank[BankKey] ) ) ) ) + 0 ),
+				        ROW ( "Area", "Keys", "Check", "P&L rows without a known entity", "Failures", COUNTROWS ( FILTER ( FactTreasuryPnL, ISBLANK ( RELATED ( DimEntity[EntityKey] ) ) ) ) + 0 ),
+				        ROW ( "Area", "Keys", "Check", "P&L rows with an unknown scenario", "Failures", COUNTROWS ( FILTER ( FactTreasuryPnL, ISBLANK ( RELATED ( DimScenario[Scenario] ) ) ) ) + 0 ),
+				        ROW ( "Area", "Values", "Check", "Negative balances", "Failures", COUNTROWS ( FILTER ( FactLiquidityPosition, FactLiquidityPosition[Balance_CHF] < 0 ) ) + 0 ),
+				        ROW ( "Area", "Values", "Check", "Deposits maturing before they start", "Failures", COUNTROWS ( FILTER ( FactTermDeposits, FactTermDeposits[MaturityDate] <= FactTermDeposits[StartDate] ) ) + 0 ),
+				        ROW ( "Area", "Values", "Check", "Deposits without a CHF principal", "Failures", COUNTROWS ( FILTER ( FactTermDeposits, ISBLANK ( FactTermDeposits[Principal_CHF] ) ) ) + 0 ),
+				        ROW ( "Area", "Values", "Check", "Closed issues without a close date", "Failures", COUNTROWS ( FILTER ( FactBankIssues, FactBankIssues[Status] = "Closed" && ISBLANK ( FactBankIssues[CloseDate] ) ) ) + 0 ),
+				        ROW ( "Area", "Security", "Check", "RLS users mapped to an unknown entity", "Failures", COUNTROWS ( EXCEPT ( VALUES ( SecurityUserEntity[EntityKey] ), VALUES ( DimEntity[EntityKey] ) ) ) + 0 )
+				    )
+				RETURN ADDCOLUMNS ( _Checks, "Result", IF ( [Failures] = 0, "Pass", "Fail" ) )
+

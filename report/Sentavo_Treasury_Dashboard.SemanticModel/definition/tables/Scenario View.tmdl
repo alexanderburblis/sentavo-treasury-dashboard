@@ -1,0 +1,68 @@
+/// Switches the P&L measures between Actual, Budget, the latest forecast and
+/// the variance to budget. Applies only to the PnL Amount measures.
+table 'Scenario View'
+	lineageTag: 3a00d674-ce94-49a9-bb39-da275f83f50b
+
+	calculationGroup
+		precedence: 10
+
+		calculationItem Actual =
+				IF (
+				    ISSELECTEDMEASURE ( [PnL Amount CHF], [PnL Amount YTD CHF] ),
+				    CALCULATE ( SELECTEDMEASURE (), DimScenario[Scenario] = "Actual" ),
+				    SELECTEDMEASURE ()
+				)
+
+		calculationItem Budget =
+				IF (
+				    ISSELECTEDMEASURE ( [PnL Amount CHF], [PnL Amount YTD CHF] ),
+				    CALCULATE ( SELECTEDMEASURE (), DimScenario[Scenario] = "Budget", KEEPFILTERS ( 'Date'[IsClosedMonth] = 1 ) ),
+				    SELECTEDMEASURE ()
+				)
+
+		calculationItem Forecast =
+				VAR _Latest = CALCULATE ( MAX ( DimScenario[Scenario] ), DimScenario[ScenarioType] = "Reforecast", REMOVEFILTERS () )
+				RETURN
+				    IF (
+				        ISSELECTEDMEASURE ( [PnL Amount CHF], [PnL Amount YTD CHF] ),
+				        CALCULATE ( SELECTEDMEASURE (), DimScenario[Scenario] = _Latest, KEEPFILTERS ( 'Date'[IsClosedMonth] = 1 ) ),
+				        SELECTEDMEASURE ()
+				    )
+
+		calculationItem Variance =
+				VAR _A = CALCULATE ( SELECTEDMEASURE (), DimScenario[Scenario] = "Actual" )
+				VAR _B = CALCULATE ( SELECTEDMEASURE (), DimScenario[Scenario] = "Budget", KEEPFILTERS ( 'Date'[IsClosedMonth] = 1 ) )
+				RETURN
+				    IF (
+				        ISSELECTEDMEASURE ( [PnL Amount CHF], [PnL Amount YTD CHF] ),
+				        IF ( NOT ISBLANK ( _A ), _A - _B ),
+				        SELECTEDMEASURE ()
+				    )
+
+		calculationItem 'Variance %' =
+				VAR _A = CALCULATE ( SELECTEDMEASURE (), DimScenario[Scenario] = "Actual" )
+				VAR _B = CALCULATE ( SELECTEDMEASURE (), DimScenario[Scenario] = "Budget", KEEPFILTERS ( 'Date'[IsClosedMonth] = 1 ) )
+				RETURN
+				    IF (
+				        ISSELECTEDMEASURE ( [PnL Amount CHF], [PnL Amount YTD CHF] ),
+				        DIVIDE ( _A - _B, ABS ( _B ) ),
+				        SELECTEDMEASURE ()
+				    )
+
+			formatStringDefinition = IF ( ISSELECTEDMEASURE ( [PnL Amount CHF], [PnL Amount YTD CHF] ), "+0.0%;-0.0%;0.0%", SELECTEDMEASUREFORMATSTRING () )
+
+	column View
+		dataType: string
+		lineageTag: bd86379e-0ba9-4e52-a204-7edda18ffe5e
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a412c850-c8cb-434d-8b34-e919490ca5ae
+		summarizeBy: sum
+		sourceColumn: Ordinal
+

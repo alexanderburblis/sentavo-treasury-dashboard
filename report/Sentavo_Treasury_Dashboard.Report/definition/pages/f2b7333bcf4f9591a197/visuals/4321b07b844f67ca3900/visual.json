@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "4321b07b844f67ca3900",
+  "position": {
+    "x": 856,
+    "y": 310,
+    "z": 20000,
+    "height": 86,
+    "width": 200,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Latest Forecast Label"
+                }
+              },
+              "queryRef": "_Measures.Latest Forecast Label",
+              "nativeQueryRef": "Latest Forecast Label",
+              "displayName": "Latest reforecast"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

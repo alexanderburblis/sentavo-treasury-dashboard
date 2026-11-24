@@ -1,0 +1,101 @@
+table DimBank
+	lineageTag: 7fb4d0da-2e28-4667-8cc4-d8ac155c51f2
+
+	column BankKey
+		dataType: string
+		lineageTag: 34149090-f96a-4797-bffe-8bf675b45dac
+		summarizeBy: none
+		sourceColumn: BankKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column BankLabel
+		dataType: string
+		lineageTag: 7b311c07-481a-4de2-a340-76a539234918
+		summarizeBy: none
+		sourceColumn: BankLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tier
+		dataType: string
+		lineageTag: 5b0a5d5a-0e2e-46f7-b654-78752a837dfa
+		summarizeBy: none
+		sourceColumn: Tier
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segment
+		dataType: string
+		lineageTag: 5b2a9acb-9dc6-4a14-b9fa-7cb380d9de0f
+		summarizeBy: none
+		sourceColumn: Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: b4dc4788-828d-4882-8610-1b6ccc027d21
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rating
+		dataType: string
+		lineageTag: 9b86c322-0425-4da8-9847-cfc5a0f8d802
+		summarizeBy: none
+		sourceColumn: Rating
+
+		annotation SummarizationSetBy = Automatic
+
+	column Outlook
+		dataType: string
+		lineageTag: f6c6c522-a71d-4623-994c-76f54703bf56
+		summarizeBy: none
+		sourceColumn: Outlook
+
+		annotation SummarizationSetBy = Automatic
+
+	column CounterpartyLimit_CHF_m
+		dataType: int64
+		formatString: 0
+		lineageTag: 97dcbbfb-2dbf-4279-9cad-2e8fb4317916
+		summarizeBy: sum
+		sourceColumn: CounterpartyLimit_CHF_m
+
+		annotation SummarizationSetBy = Automatic
+
+	column RatingSort
+		dataType: int64
+		formatString: 0
+		lineageTag: 1ae0ec80-31f4-4c0f-9aeb-2532bd3c5430
+		summarizeBy: sum
+		sourceColumn: RatingSort
+
+		annotation SummarizationSetBy = Automatic
+
+	column CounterpartyLimit_CHF
+		dataType: int64
+		formatString: 0
+		lineageTag: 8cf4acfc-a165-4900-a672-933d17990127
+		summarizeBy: sum
+		sourceColumn: CounterpartyLimit_CHF
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimBank = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    DimBank_Sheet = Source{[Item="DimBank",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(DimBank_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"BankKey", type text}, {"BankLabel", type text}, {"Tier", type text}, {"Segment", type text}, {"Country", type text}, {"Rating", type text}, {"Outlook", type text}, {"CounterpartyLimit_CHF_m", Int64.Type}, {"RatingSort", Int64.Type}, {"CounterpartyLimit_CHF", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

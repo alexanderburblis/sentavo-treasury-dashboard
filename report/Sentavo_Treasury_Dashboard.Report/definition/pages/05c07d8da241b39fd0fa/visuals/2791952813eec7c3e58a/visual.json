@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "2791952813eec7c3e58a",
+  "position": {
+    "x": 16,
+    "y": 14,
+    "z": 0,
+    "height": 90,
+    "width": 240,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Fees YTD CHF"
+                }
+              },
+              "queryRef": "_Measures.Fees YTD CHF",
+              "nativeQueryRef": "Fees YTD CHF",
+              "displayName": "Bank fees YTD"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

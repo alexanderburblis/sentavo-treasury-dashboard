@@ -1,0 +1,80 @@
+table FactCashForecast
+	lineageTag: 942dc025-ba11-4a2c-8a53-466136e9d5ec
+
+	column WeekStart
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c63d7384-df54-40e6-9987-0260eee2246e
+		summarizeBy: none
+		sourceColumn: WeekStart
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column EntityKey
+		dataType: string
+		lineageTag: 4f9a703f-c391-4c57-9e6a-cbd0d38692ef
+		summarizeBy: none
+		sourceColumn: EntityKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column FlowCategory
+		dataType: string
+		lineageTag: 9580cc48-e27b-4cad-9ef5-28071d10789f
+		summarizeBy: none
+		sourceColumn: FlowCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column HorizonWeeks
+		dataType: int64
+		formatString: 0
+		lineageTag: d9c19c83-c362-4c4d-918e-5492efb3de1c
+		summarizeBy: none
+		sourceColumn: HorizonWeeks
+
+		annotation SummarizationSetBy = User
+
+	column Forecast_CHF
+		dataType: int64
+		formatString: 0
+		lineageTag: e44ef437-7696-45d4-8a39-330a552315ac
+		summarizeBy: sum
+		sourceColumn: Forecast_CHF
+
+		annotation SummarizationSetBy = Automatic
+
+	column Actual_CHF
+		dataType: int64
+		formatString: 0
+		lineageTag: b40e5db3-2f85-4894-891f-271720b0822c
+		summarizeBy: sum
+		sourceColumn: Actual_CHF
+
+		annotation SummarizationSetBy = Automatic
+
+	column Direction
+		dataType: string
+		lineageTag: 1450a526-4c8d-4682-a875-c310dee8d002
+		summarizeBy: none
+		sourceColumn: Direction
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactCashForecast = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    FactCashForecast_Sheet = Source{[Item="FactCashForecast",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(FactCashForecast_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"WeekStart", type date}, {"EntityKey", type text}, {"FlowCategory", type text}, {"HorizonWeeks", Int64.Type}, {"Forecast_CHF", Int64.Type}, {"Actual_CHF", Int64.Type}, {"Direction", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

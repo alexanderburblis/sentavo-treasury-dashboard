@@ -1,0 +1,55 @@
+table FactBankFees
+	lineageTag: c75c10a8-b3a6-4fcf-b044-f0d902248375
+
+	column FeeMonth
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 49aa938b-3056-4bcc-a6f6-59ddfda76535
+		summarizeBy: none
+		sourceColumn: FeeMonth
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column BankKey
+		dataType: string
+		lineageTag: df203842-efa3-4c35-b849-38d82ba76ab2
+		summarizeBy: none
+		sourceColumn: BankKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column FeeCategory
+		dataType: string
+		lineageTag: 49ee729e-d38a-49d7-9d53-7e372722a7b8
+		summarizeBy: none
+		sourceColumn: FeeCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column Amount_CHF
+		dataType: double
+		lineageTag: fbbe68f8-aec4-4347-9938-03ae9741eb2b
+		summarizeBy: sum
+		sourceColumn: Amount_CHF
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition FactBankFees = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    FactBankFees_Sheet = Source{[Item="FactBankFees",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(FactBankFees_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"FeeMonth", type date}, {"BankKey", type text}, {"FeeCategory", type text}, {"Amount_CHF", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

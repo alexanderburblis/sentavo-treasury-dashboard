@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "cca044e981db7b332c66",
+  "position": {
+    "x": 952,
+    "y": 14,
+    "z": 3000,
+    "height": 90,
+    "width": 312,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Fact Rows Loaded"
+                }
+              },
+              "queryRef": "_Measures.Fact Rows Loaded",
+              "nativeQueryRef": "Fact Rows Loaded",
+              "displayName": "Fact rows loaded"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

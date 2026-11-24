@@ -1,0 +1,75 @@
+table DimFund
+	lineageTag: c0cc8759-0e2c-4557-a0ab-f6849b9e5617
+
+	column FundKey
+		dataType: string
+		lineageTag: b63e5276-d0cb-450a-825e-902903b5b5db
+		summarizeBy: none
+		sourceColumn: FundKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column FundName
+		dataType: string
+		lineageTag: 21745569-9e2e-43fd-ac7a-445906276d4d
+		summarizeBy: none
+		sourceColumn: FundName
+
+		annotation SummarizationSetBy = Automatic
+
+	column SponsorBankKey
+		dataType: string
+		lineageTag: 908e5360-6361-4699-b7e2-711ab27b4215
+		summarizeBy: none
+		sourceColumn: SponsorBankKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Currency
+		dataType: string
+		lineageTag: b84d1e04-7db2-4b08-9882-47a9617e9af5
+		summarizeBy: none
+		sourceColumn: Currency
+
+		annotation SummarizationSetBy = Automatic
+
+	column FundType
+		dataType: string
+		lineageTag: 881ab361-a4d7-465c-8d5b-77af769886d4
+		summarizeBy: none
+		sourceColumn: FundType
+
+		annotation SummarizationSetBy = Automatic
+
+	column FundRating
+		dataType: string
+		lineageTag: 75b96cd7-3522-4c05-80a3-7eca42c06e65
+		summarizeBy: none
+		sourceColumn: FundRating
+
+		annotation SummarizationSetBy = Automatic
+
+	column RatingBucket
+		dataType: string
+		lineageTag: 64180ba0-8d42-4794-8648-dcf2b4947d83
+		summarizeBy: none
+		sourceColumn: RatingBucket
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimFund = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    DimFund_Sheet = Source{[Item="DimFund",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(DimFund_Sheet,{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}, {"Column4", type text}, {"Column5", type text}, {"Column6", type text}, {"Column7", type text}}),
+				    #"Removed Top Rows" = Table.Skip(#"Changed Type",1),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Top Rows",{{"Column1", "FundKey"}, {"Column2", "FundName"}, {"Column3", "SponsorBankKey"}, {"Column4", "Currency"}, {"Column5", "FundType"}, {"Column6", "FundRating"}, {"Column7", "RatingBucket"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

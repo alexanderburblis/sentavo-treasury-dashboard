@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "d5e0cfd48bd13c3e5bdb",
+  "position": {
+    "x": 1008,
+    "y": 14,
+    "z": 4000,
+    "height": 90,
+    "width": 256,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Median Days to Resolve"
+                }
+              },
+              "queryRef": "_Measures.Median Days to Resolve",
+              "nativeQueryRef": "Median Days to Resolve",
+              "displayName": "Median days to resolve"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

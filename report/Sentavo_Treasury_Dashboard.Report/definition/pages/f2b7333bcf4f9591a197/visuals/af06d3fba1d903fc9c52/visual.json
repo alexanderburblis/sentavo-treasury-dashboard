@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "af06d3fba1d903fc9c52",
+  "position": {
+    "x": 648,
+    "y": 310,
+    "z": 20000,
+    "height": 86,
+    "width": 200,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Outturn vs Budget CHF"
+                }
+              },
+              "queryRef": "_Measures.Outturn vs Budget CHF",
+              "nativeQueryRef": "Outturn vs Budget CHF",
+              "displayName": "Outturn vs budget"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

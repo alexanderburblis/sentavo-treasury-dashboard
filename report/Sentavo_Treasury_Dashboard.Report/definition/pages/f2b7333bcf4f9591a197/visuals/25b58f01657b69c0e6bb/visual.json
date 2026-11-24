@@ -1,0 +1,134 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "25b58f01657b69c0e6bb",
+  "position": {
+    "x": 648,
+    "y": 116,
+    "z": 20000,
+    "height": 186,
+    "width": 616,
+    "tabOrder": 20000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Scenario View"
+                    }
+                  },
+                  "Property": "View"
+                }
+              },
+              "queryRef": "Scenario View.View",
+              "nativeQueryRef": "View",
+              "active": true
+            }
+          ]
+        },
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactTreasuryPnL"
+                    }
+                  },
+                  "Property": "Line"
+                }
+              },
+              "queryRef": "FactTreasuryPnL.Line",
+              "nativeQueryRef": "Line",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactTreasuryPnL"
+                    }
+                  },
+                  "Property": "Category"
+                }
+              },
+              "queryRef": "FactTreasuryPnL.Category",
+              "nativeQueryRef": "Category",
+              "active": false
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "PnL Amount YTD CHF"
+                }
+              },
+              "queryRef": "_Measures.PnL Amount YTD CHF",
+              "nativeQueryRef": "PnL Amount YTD CHF"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Year to date by line: Actual / Budget / Forecast / Variance (calculation group)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

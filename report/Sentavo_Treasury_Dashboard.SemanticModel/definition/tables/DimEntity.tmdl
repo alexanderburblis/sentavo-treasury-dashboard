@@ -1,0 +1,59 @@
+table DimEntity
+	lineageTag: a25b6916-aeb8-498b-86e5-b724d1d96f38
+
+	column EntityKey
+		dataType: string
+		lineageTag: eae59b1a-c600-494b-8af7-9aba46ab2a34
+		summarizeBy: none
+		sourceColumn: EntityKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column EntityName
+		dataType: string
+		lineageTag: 8c6ed264-9d32-4ef3-9d2a-ae5a93c46ff9
+		summarizeBy: none
+		sourceColumn: EntityName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: d9f23654-583b-4774-a703-933af13f2de8
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column FunctionalCurrency
+		dataType: string
+		lineageTag: 8e473355-8430-42b0-8eae-643a7594c3fa
+		summarizeBy: none
+		sourceColumn: FunctionalCurrency
+
+		annotation SummarizationSetBy = Automatic
+
+	column Role
+		dataType: string
+		lineageTag: 212f0684-aeed-4615-952f-b8017b3e25a1
+		summarizeBy: none
+		sourceColumn: Role
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimEntity = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    DimEntity_Sheet = Source{[Item="DimEntity",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(DimEntity_Sheet,{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}, {"Column4", type text}, {"Column5", type text}}),
+				    #"Removed Top Rows" = Table.Skip(#"Changed Type",1),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Top Rows",{{"Column1", "EntityKey"}, {"Column2", "EntityName"}, {"Column3", "Country"}, {"Column4", "FunctionalCurrency"}, {"Column5", "Role"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

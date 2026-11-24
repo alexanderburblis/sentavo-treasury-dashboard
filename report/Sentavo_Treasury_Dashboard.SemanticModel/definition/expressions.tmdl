@@ -1,0 +1,6 @@
+/// Path to data/sentavo_treasury_dataset.xlsx in your copy of the repository.
+expression DataFile = "C:\Users\User\Documents\Sentavo_Treasury_Dashboard\sentavo-treasury-dashboard\treasury-dashboard\data\sentavo_treasury_dataset.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 3f0c9a51-7d2e-4b8a-9c61-2a5e8d4f1b07
+
+	annotation PBI_ResultType = Text
+

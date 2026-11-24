@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "1e683ac3743926165627",
+  "position": {
+    "x": 16,
+    "y": 14,
+    "z": 0,
+    "height": 90,
+    "width": 240,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Term Deposits CHF"
+                }
+              },
+              "queryRef": "_Measures.Term Deposits CHF",
+              "nativeQueryRef": "Term Deposits CHF",
+              "displayName": "Term deposits today"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "23fa8c97a533615a4afa",
+  "position": {
+    "x": 512,
+    "y": 14,
+    "z": 2000,
+    "height": 90,
+    "width": 240,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Fees vs Budget YTD %"
+                }
+              },
+              "queryRef": "_Measures.Fees vs Budget YTD %",
+              "nativeQueryRef": "Fees vs Budget YTD %",
+              "displayName": "vs budget (+ = over)"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

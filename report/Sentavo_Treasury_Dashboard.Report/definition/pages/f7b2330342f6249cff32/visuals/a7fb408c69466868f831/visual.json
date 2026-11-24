@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "a7fb408c69466868f831",
+  "position": {
+    "x": 512,
+    "y": 14,
+    "z": 2000,
+    "height": 90,
+    "width": 240,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Placed vs Best Quote bps"
+                }
+              },
+              "queryRef": "_Measures.Placed vs Best Quote bps",
+              "nativeQueryRef": "Placed vs Best Quote bps",
+              "displayName": "Placed vs best quote (bps)"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

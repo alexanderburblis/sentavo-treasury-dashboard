@@ -1,0 +1,28 @@
+/// User-to-entity mapping for dynamic row-level security. Fictional users. Not related to the model: the role filter reads it with USERPRINCIPALNAME().
+table SecurityUserEntity
+	isHidden
+	lineageTag: 6467f3da-0071-45fe-b4c3-c86f9a075f4b
+
+	column UserPrincipalName
+		dataType: string
+		lineageTag: e54213b1-9ff7-48d4-ac72-abac451602a5
+		summarizeBy: none
+		sourceColumn: UserPrincipalName
+
+	column EntityKey
+		dataType: string
+		lineageTag: bdfb6fa2-43d3-4404-a522-c94ebf98df08
+		summarizeBy: none
+		sourceColumn: EntityKey
+
+	partition SecurityUserEntity = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    Sheet = Source{[Item="SecurityUserEntity",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"UserPrincipalName", type text}, {"EntityKey", type text}})
+				in
+				    #"Changed Type"
+

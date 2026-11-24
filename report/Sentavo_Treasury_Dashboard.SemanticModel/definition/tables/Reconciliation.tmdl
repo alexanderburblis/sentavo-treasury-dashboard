@@ -1,0 +1,57 @@
+/// Headline figures from the README, recalculated in DAX at refresh. The same
+/// figures are checked in SQL (src/run_sql_checks.py) and pandas (tests/).
+table Reconciliation
+	lineageTag: 06983cac-62e7-4473-91c3-0deaad610f4d
+
+	column Figure
+		dataType: string
+		lineageTag: 1c7eab1f-fa53-4630-b2a6-7097be35c775
+		isNameInferred
+		sourceColumn: [Figure]
+
+	column README
+		dataType: double
+		formatString: #,0.0
+		lineageTag: e649cbe6-a2fe-4e36-81b2-33e561fcdf4f
+		isNameInferred
+		sourceColumn: [README]
+
+	column DAX
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 11fb5cfe-326d-42be-afa8-1144195113d9
+		isNameInferred
+		sourceColumn: [DAX]
+
+	column Tolerance
+		dataType: double
+		isHidden
+		lineageTag: fd826a49-3333-46d7-9267-d99c946c1f6a
+		isNameInferred
+		sourceColumn: [Tolerance]
+
+	column Status
+		dataType: string
+		lineageTag: 885c17e5-0631-485e-bd1c-fd324f77f289
+		isNameInferred
+		sourceColumn: [Status]
+
+	partition Reconciliation = calculated
+		mode: import
+		source =
+				VAR _PL = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( 'Date'[Date] ), "@U", [Limit Utilisation %] ), DimBank[BankKey] = "B06" )
+				VAR _Rows =
+				    UNION (
+				        ROW ( "Figure", "Cash, CHF m", "README", 516.9, "DAX", [Cash CHF] / 1e6, "Tolerance", 0.05 ),
+				        ROW ( "Figure", "Cash outside the in-house bank, CHF m", "README", 154.4, "DAX", [Cash Outside IHB CHF] / 1e6, "Tolerance", 0.05 ),
+				        ROW ( "Figure", "Highest bank utilisation today, %", "README", 78.1, "DAX", [Max Bank Utilisation %] * 100, "Tolerance", 0.05 ),
+				        ROW ( "Figure", "Regional Bank PL, business days over limit", "README", 41, "DAX", COUNTROWS ( FILTER ( _PL, [@U] > 1 ) ), "Tolerance", 0 ),
+				        ROW ( "Figure", "Regional Bank PL, peak utilisation, %", "README", 128.6, "DAX", MAXX ( _PL, [@U] ) * 100, "Tolerance", 0.05 ),
+				        ROW ( "Figure", "Forecast WAPE at 1 week, %", "README", 4.5, "DAX", CALCULATE ( [Forecast WAPE %], FactCashForecast[HorizonWeeks] = 1 ) * 100, "Tolerance", 0.05 ),
+				        ROW ( "Figure", "Forecast WAPE at 13 weeks, %", "README", 15.7, "DAX", CALCULATE ( [Forecast WAPE %], FactCashForecast[HorizonWeeks] = 13 ) * 100, "Tolerance", 0.05 ),
+				        ROW ( "Figure", "Interest income 2025, actual, CHF m", "README", 7.16, "DAX", CALCULATE ( [Actual CHF], 'Date'[Year] = 2025, FactTreasuryPnL[Line] = "Interest income" ) / 1e6, "Tolerance", 0.005 ),
+				        ROW ( "Figure", "Interest income 2025, budget, CHF m", "README", 9.76, "DAX", CALCULATE ( [Budget CHF], 'Date'[Year] = 2025, FactTreasuryPnL[Line] = "Interest income" ) / 1e6, "Tolerance", 0.005 ),
+				        ROW ( "Figure", "Treasury result 2026 to September vs budget, CHF m", "README", -0.82, "DAX", CALCULATE ( [Variance CHF], 'Date'[Year] = 2026 ) / 1e6, "Tolerance", 0.005 )
+				    )
+				RETURN ADDCOLUMNS ( _Rows, "Status", IF ( ABS ( [DAX] - [README] ) <= [Tolerance], "Match", "Check" ) )
+

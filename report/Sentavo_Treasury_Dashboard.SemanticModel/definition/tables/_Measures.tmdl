@@ -1,0 +1,687 @@
+table _Measures
+	lineageTag: 03609879-3eec-4921-9f90-d5d0041cd02e
+
+	measure 'Cash CHF' = VAR _AsOf = MAX ( FactLiquidityPosition[Date] ) RETURN CALCULATE ( SUM ( FactLiquidityPosition[Balance_CHF] ), FactLiquidityPosition[Date] = _AsOf )
+		formatString: #,0.0
+		displayFolder: 1 Liquidity
+		lineageTag: 689d1b78-587e-48fb-99fc-2f459b6007e5
+
+	measure 'Cash at IHB CHF' = CALCULATE ( [Cash CHF], DimEntity[Role] = "Holding & in-house bank" )
+		formatString: #,0.0
+		displayFolder: 1 Liquidity
+		lineageTag: 309cc1ea-4b22-47ea-9f3d-274263fae6d6
+
+	measure 'Cash Outside IHB CHF' = [Cash CHF] - [Cash at IHB CHF]
+		formatString: #,0.0
+		displayFolder: 1 Liquidity
+		lineageTag: b9fc82a3-ed0d-4501-a339-023c8393860e
+
+	measure 'Cash Outside IHB %' = DIVIDE ( [Cash Outside IHB CHF], [Cash CHF] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 1 Liquidity
+		lineageTag: 1e8a9653-81e7-4f68-90a4-ab79e8dd5721
+
+	measure 'Bank Exposure CHF' = VAR _AsOf = MAX ( FactLiquidityPosition[Date] ) RETURN CALCULATE ( SUM ( FactLiquidityPosition[Balance_CHF] ), FactLiquidityPosition[Date] = _AsOf, FactLiquidityPosition[CounterpartyType] = "Bank" )
+		formatString: #,0.0
+		displayFolder: 2 Counterparty risk
+		lineageTag: d574cb1d-0102-4031-a5f2-f769f6903bda
+
+	measure 'Counterparty Limit CHF' = SUM ( DimBank[CounterpartyLimit_CHF] )
+		formatString: #,0.0
+		displayFolder: 2 Counterparty risk
+		lineageTag: 25cb9a21-c86e-4b81-a309-a2a0b2d0df48
+
+	measure 'Alert Threshold' = 0.8
+		formatString: 0%
+		displayFolder: 2 Counterparty risk
+		lineageTag: ed03c8fe-35b0-4a0e-9fbc-ac9eca9d18ed
+
+	measure 'Limit Utilisation %' = DIVIDE ( [Bank Exposure CHF], [Counterparty Limit CHF] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 2 Counterparty risk
+		lineageTag: 4ee4c567-9acc-46c9-9c32-48be00fd8e9d
+
+	measure 'Max Bank Utilisation %' = MAXX ( VALUES ( DimBank[BankKey] ), [Limit Utilisation %] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 2 Counterparty risk
+		lineageTag: ca90edf7-ba37-486e-992a-d2698a004edd
+
+	measure 'Days Over Limit' = SUMX ( VALUES ( DimBank[BankKey] ), COUNTROWS ( FILTER ( VALUES ( 'Date'[Date] ), [Limit Utilisation %] > 1 ) ) )
+		formatString: 0
+		displayFolder: 2 Counterparty risk
+		lineageTag: ad18cd2e-2a8e-41a1-ba42-cd31e81d616b
+
+	measure 'Utilisation RAG Color' = SWITCH ( TRUE (), [Limit Utilisation %] > 1, "#E5484D", [Limit Utilisation %] >= [Alert Threshold], "#F5A623", "#2FBF8F" )
+		displayFolder: 2 Counterparty risk
+		lineageTag: 074e452b-e747-4001-a50e-260f3c2f1636
+
+	measure 'Credit Spread bps' = AVERAGE ( FactCreditSpreads[CreditSpread_bps] )
+		formatString: 0.0
+		displayFolder: 2 Counterparty risk
+		lineageTag: f72ef66d-2719-4056-8e98-b6bbced0d660
+
+	measure 'Fcst Net 13W CHF' = CALCULATE ( SUM ( FactCashForecast[Forecast_CHF] ), FactCashForecast[FlowCategory] <> "Intercompany", FactCashForecast[HorizonWeeks] = 13 )
+		formatString: #,0.0
+		displayFolder: 3 Forecast
+		lineageTag: 0ec22791-6c0c-4ed7-89e0-cadf4d0e5d24
+
+	measure 'Fcst Net 1W CHF' = CALCULATE ( SUM ( FactCashForecast[Forecast_CHF] ), FactCashForecast[FlowCategory] <> "Intercompany", FactCashForecast[HorizonWeeks] = 1 )
+		formatString: #,0.0
+		displayFolder: 3 Forecast
+		lineageTag: 6fcca457-0138-4010-9900-2e32abe6cbc5
+
+	measure 'Actual Net CHF' = CALCULATE ( SUM ( FactCashForecast[Actual_CHF] ), FactCashForecast[FlowCategory] <> "Intercompany", FactCashForecast[HorizonWeeks] = 1 )
+		formatString: #,0.0
+		displayFolder: 3 Forecast
+		lineageTag: bf1413df-8675-4980-8d42-95a70e2fba42
+
+	measure 'Last13W Flag' = VAR _Last = CALCULATE ( MAX ( FactCashForecast[WeekStart] ), REMOVEFILTERS () ) VAR _Cur = MAX ( 'Date'[WeekStart] ) RETURN IF ( _Cur > _Last - 91 && _Cur <= _Last, 1, 0 )
+		formatString: 0
+		displayFolder: 3 Forecast
+		lineageTag: 3c451180-4bb4-417b-b190-a61dc23bb589
+
+	/// Running total over the last 13 forecast weeks. The current week is capped at
+	/// the last forecast week, so a card with no date filter shows the full window.
+	measure 'Cum Fcst 13W CHF' =
+			VAR _Last  = CALCULATE ( MAX ( FactCashForecast[WeekStart] ), REMOVEFILTERS () )
+			VAR _Start = _Last - 84
+			VAR _Max   = MAX ( 'Date'[WeekStart] )
+			VAR _Cur   = MIN ( _Max, _Last )
+			RETURN
+			    IF (
+			        _Cur >= _Start && NOT ( HASONEVALUE ( 'Date'[WeekStart] ) && _Max > _Last ),
+			        CALCULATE (
+			            [Fcst Net 13W CHF],
+			            REMOVEFILTERS ( 'Date' ),
+			            'Date'[WeekStart] >= _Start,
+			            'Date'[WeekStart] <= _Cur
+			        )
+			    )
+		formatString: #,0.0
+		displayFolder: 3 Forecast
+		lineageTag: 4eb39ba7-7af2-49b9-b330-3ccdb6c41dff
+
+	/// Running total over the last 13 forecast weeks. The current week is capped at
+	/// the last forecast week, so a card with no date filter shows the full window.
+	measure 'Cum Fcst 1W CHF' =
+			VAR _Last  = CALCULATE ( MAX ( FactCashForecast[WeekStart] ), REMOVEFILTERS () )
+			VAR _Start = _Last - 84
+			VAR _Max   = MAX ( 'Date'[WeekStart] )
+			VAR _Cur   = MIN ( _Max, _Last )
+			RETURN
+			    IF (
+			        _Cur >= _Start && NOT ( HASONEVALUE ( 'Date'[WeekStart] ) && _Max > _Last ),
+			        CALCULATE (
+			            [Fcst Net 1W CHF],
+			            REMOVEFILTERS ( 'Date' ),
+			            'Date'[WeekStart] >= _Start,
+			            'Date'[WeekStart] <= _Cur
+			        )
+			    )
+		formatString: #,0.0
+		displayFolder: 3 Forecast
+		lineageTag: 51130ea5-a285-488e-9d67-ac834b144353
+
+	/// Running total over the last 13 forecast weeks. The current week is capped at
+	/// the last forecast week, so a card with no date filter shows the full window.
+	measure 'Cum Actual CHF' =
+			VAR _Last  = CALCULATE ( MAX ( FactCashForecast[WeekStart] ), REMOVEFILTERS () )
+			VAR _Start = _Last - 84
+			VAR _Max   = MAX ( 'Date'[WeekStart] )
+			VAR _Cur   = MIN ( _Max, _Last )
+			RETURN
+			    IF (
+			        _Cur >= _Start && NOT ( HASONEVALUE ( 'Date'[WeekStart] ) && _Max > _Last ),
+			        CALCULATE (
+			            [Actual Net CHF],
+			            REMOVEFILTERS ( 'Date' ),
+			            'Date'[WeekStart] >= _Start,
+			            'Date'[WeekStart] <= _Cur
+			        )
+			    )
+		formatString: #,0.0
+		displayFolder: 3 Forecast
+		lineageTag: 8f6776ea-9524-45dd-9d38-3cfa9d6d29d7
+
+	measure 'Cum Gap 13W CHF' = [Cum Fcst 13W CHF] - [Cum Actual CHF]
+		formatString: +#,0.0;-#,0.0;
+		displayFolder: 3 Forecast
+		lineageTag: 036d13c2-4dd2-4940-bd23-cfdf3a5cb216
+
+	measure 'Abs Fcst Error CHF' = SUMX ( FactCashForecast, ABS ( FactCashForecast[Forecast_CHF] - FactCashForecast[Actual_CHF] ) )
+		formatString: #,0.0
+		displayFolder: 3 Forecast
+		lineageTag: 31f3d666-5c0e-44f8-b7d1-5178d9e3b54a
+
+	measure 'Abs Actual CHF' = CALCULATE ( SUMX ( FactCashForecast, ABS ( FactCashForecast[Actual_CHF] ) ), FactCashForecast[HorizonWeeks] = 1 )
+		formatString: #,0.0
+		displayFolder: 3 Forecast
+		lineageTag: 63203d2e-49e8-4c4f-b02f-2dccc01b901b
+
+	measure 'Forecast WAPE %' = DIVIDE ( [Abs Fcst Error CHF], [Abs Actual CHF] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 3 Forecast
+		lineageTag: 7840ce1e-ad7b-4592-bd18-f061d954eb05
+
+	measure 'Receipts Bias %' = VAR _F = CALCULATE ( SUM ( FactCashForecast[Forecast_CHF] ), FactCashForecast[FlowCategory] = "Customer receipts" ) VAR _A = CALCULATE ( SUM ( FactCashForecast[Actual_CHF] ), FactCashForecast[FlowCategory] = "Customer receipts", FactCashForecast[HorizonWeeks] = 1 ) RETURN DIVIDE ( _F - _A, _A )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 3 Forecast
+		lineageTag: 107ccb2f-5f5c-4057-a5ee-4412d398ca01
+
+	/// Last month with booked actuals.
+	measure 'Last Actual Month' = CALCULATE ( MAX ( FactTreasuryPnL[Month] ), DimScenario[Scenario] = "Actual", REMOVEFILTERS () )
+		formatString: mmm yyyy
+		displayFolder: 4 Budget vs actual
+		lineageTag: 80ba67f2-1a39-4707-9259-894c5159c7e2
+
+	/// Name of the most recent reforecast.
+	measure 'Latest Forecast' = CALCULATE ( MAX ( DimScenario[Scenario] ), DimScenario[ScenarioType] = "Reforecast", REMOVEFILTERS () )
+		displayFolder: 4 Budget vs actual
+		lineageTag: 348043d4-984a-4047-99a0-fd36126d3e15
+
+	/// Base measure for the Scenario View calculation group. Blank unless one
+	/// scenario is in context, so actuals and plans are never added together.
+	measure 'PnL Amount CHF' = IF ( HASONEVALUE ( DimScenario[Scenario] ), SUM ( FactTreasuryPnL[Amount_CHF] ) )
+		formatString: #,0
+		displayFolder: 4 Budget vs actual
+		lineageTag: 7e258bcb-9cb3-4728-bf34-e031b5c16e66
+
+	measure 'PnL Amount YTD CHF' =
+			VAR _End = [YTD End Date]
+			RETURN CALCULATE ( [PnL Amount CHF], DATESBETWEEN ( 'Date'[Date], DATE ( YEAR ( _End ), 1, 1 ), _End ) )
+		formatString: #,0
+		displayFolder: 4 Budget vs actual
+		lineageTag: 7b1b5adc-4fcd-4bcd-9e09-f11384f488df
+
+	measure 'Actual CHF' = CALCULATE ( SUM ( FactTreasuryPnL[Amount_CHF] ), DimScenario[Scenario] = "Actual" )
+		formatString: #,0
+		displayFolder: 4 Budget vs actual
+		lineageTag: b65d5c5c-5cf2-4399-a0d9-bfa462963f94
+
+	measure 'Budget CHF' = CALCULATE ( SUM ( FactTreasuryPnL[Amount_CHF] ), DimScenario[Scenario] = "Budget" )
+		formatString: #,0
+		displayFolder: 4 Budget vs actual
+		lineageTag: fe9f7940-7770-4592-90a9-e90def8d8a8e
+
+	measure 'Forecast CHF' =
+			VAR _Latest = [Latest Forecast]
+			RETURN CALCULATE ( SUM ( FactTreasuryPnL[Amount_CHF] ), DimScenario[Scenario] = _Latest )
+		formatString: #,0
+		displayFolder: 4 Budget vs actual
+		lineageTag: 24b91a7e-ca37-4f29-8bbd-e4515aad7cff
+
+	/// Closed months only, so open months do not show the full budget as a variance.
+	measure 'Variance CHF' =
+			VAR _A = [Actual CHF]
+			VAR _B = CALCULATE ( [Budget CHF], KEEPFILTERS ( 'Date'[IsClosedMonth] = 1 ) )
+			RETURN IF ( NOT ISBLANK ( _A ), _A - _B )
+		formatString: +#,0;-#,0;0
+		displayFolder: 4 Budget vs actual
+		lineageTag: 50b49cd8-aaf4-42c5-a13e-382871beefd6
+
+	/// Positive = favourable (income above budget or cost below budget).
+	measure 'Variance %' = DIVIDE ( [Variance CHF], ABS ( CALCULATE ( [Budget CHF], KEEPFILTERS ( 'Date'[IsClosedMonth] = 1 ) ) ) )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 4 Budget vs actual
+		lineageTag: fbcbd308-d0d5-4175-9b72-7abe5dc8b136
+
+	measure 'Actual YTD CHF' =
+			VAR _End = [YTD End Date]
+			RETURN CALCULATE ( [Actual CHF], DATESBETWEEN ( 'Date'[Date], DATE ( YEAR ( _End ), 1, 1 ), _End ) )
+		formatString: #,0.00
+		displayFolder: 4 Budget vs actual\Year to date
+		lineageTag: 80ec895a-936a-45ab-820b-25be8a70f012
+
+	/// Budget for the same closed months as the actuals.
+	measure 'Budget YTD CHF' =
+			VAR _End = [YTD End Date]
+			RETURN CALCULATE ( [Budget CHF], DATESBETWEEN ( 'Date'[Date], DATE ( YEAR ( _End ), 1, 1 ), _End ) )
+		formatString: #,0.00
+		displayFolder: 4 Budget vs actual\Year to date
+		lineageTag: a87f343b-79bf-40aa-8d32-e137581f6699
+
+	measure 'Variance YTD CHF' = [Actual YTD CHF] - [Budget YTD CHF]
+		formatString: +#,0.00;-#,0.00;0.00
+		displayFolder: 4 Budget vs actual\Year to date
+		lineageTag: 7c53b13d-964d-4841-a0a5-449b4f46329e
+
+	measure 'Variance YTD %' = DIVIDE ( [Variance YTD CHF], ABS ( [Budget YTD CHF] ) )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 4 Budget vs actual\Year to date
+		lineageTag: 5f66960d-04b5-4395-ba8b-d15d229a4a52
+
+	measure 'Actual PY CHF' = CALCULATE ( [Actual CHF], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )
+		formatString: #,0
+		displayFolder: 4 Budget vs actual\Year to date
+		lineageTag: 286dee45-b4ff-409f-8f6a-e2301866ea02
+
+	measure 'Actual YoY %' = DIVIDE ( [Actual CHF] - [Actual PY CHF], ABS ( [Actual PY CHF] ) )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 4 Budget vs actual\Year to date
+		lineageTag: c4419930-7f66-43b6-ae20-4788270f04db
+
+	measure 'Actual Rolling 3M CHF' = CALCULATE ( [Actual CHF], DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -3, MONTH ) )
+		formatString: #,0
+		displayFolder: 4 Budget vs actual\Year to date
+		lineageTag: fb45d023-2d88-45b1-a605-622b3fcd229d
+
+	measure 'Budget FY CHF' =
+			VAR _Year = YEAR ( [YTD End Date] )
+			RETURN CALCULATE ( [Budget CHF], REMOVEFILTERS ( 'Date' ), 'Date'[Year] = _Year )
+		formatString: #,0.00
+		displayFolder: 4 Budget vs actual\Full year
+		lineageTag: 75c6675d-2fda-481e-a653-cae3510d92a7
+
+	/// Actuals for closed months plus the latest forecast for the rest of the year.
+	measure 'Outturn FY CHF' =
+			VAR _Year = YEAR ( [YTD End Date] )
+			VAR _Latest = [Latest Forecast]
+			VAR _Booked = CALCULATE ( [Actual CHF], REMOVEFILTERS ( 'Date' ), 'Date'[Year] = _Year, 'Date'[IsClosedMonth] = 1 )
+			VAR _ToCome = CALCULATE ( SUM ( FactTreasuryPnL[Amount_CHF] ), DimScenario[Scenario] = _Latest, REMOVEFILTERS ( 'Date' ), 'Date'[Year] = _Year, 'Date'[IsClosedMonth] = 0 )
+			RETURN _Booked + _ToCome
+		formatString: #,0.00
+		displayFolder: 4 Budget vs actual\Full year
+		lineageTag: 188018c0-77f8-4702-91b1-bd42d23ff821
+
+	measure 'Outturn vs Budget CHF' = [Outturn FY CHF] - [Budget FY CHF]
+		formatString: +#,0.00;-#,0.00;0.00
+		displayFolder: 4 Budget vs actual\Full year
+		lineageTag: f41bc56a-6f63-4038-af8c-a300239e2799
+
+	/// Text for the variance commentary box. Follows the year selected on the page.
+	measure 'Variance Commentary' =
+			VAR _Last = [Last Actual Month]
+			VAR _End = MIN ( MAX ( 'Date'[Date] ), EOMONTH ( _Last, 0 ) )
+			VAR _A = [Actual YTD CHF]
+			VAR _B = [Budget YTD CHF]
+			VAR _V = _A - _B
+			VAR _Lines =
+			    ADDCOLUMNS (
+			        CALCULATETABLE ( VALUES ( FactTreasuryPnL[Line] ), REMOVEFILTERS ( FactTreasuryPnL[Line] ) ),
+			        "@Var", CALCULATE ( [Variance YTD CHF] )
+			    )
+			VAR _Top = TOPN ( 1, _Lines, ABS ( [@Var] ), DESC )
+			VAR _TopLine = MAXX ( _Top, FactTreasuryPnL[Line] )
+			VAR _TopVar = MAXX ( _Top, [@Var] )
+			VAR _Banks =
+			    ADDCOLUMNS (
+			        VALUES ( DimBank[BankLabel] ),
+			        "@FeeVar", CALCULATE ( [Variance YTD CHF], FactTreasuryPnL[Line] = "Bank fees" )
+			    )
+			VAR _WorstBank = TOPN ( 1, _Banks, [@FeeVar], ASC )
+			VAR _BankName = MAXX ( _WorstBank, DimBank[BankLabel] )
+			VAR _BankVar = MAXX ( _WorstBank, [@FeeVar] )
+			RETURN
+			    "Jan to " & FORMAT ( _End, "mmm yyyy" ) & ": treasury result "
+			        & "CHF " & FORMAT ( _A / 1e6, "0.00" ) & "m against a budget of CHF " & FORMAT ( _B / 1e6, "0.00" ) & "m, "
+			        & IF ( _V >= 0, "favourable", "unfavourable" ) & " by CHF " & FORMAT ( ABS ( _V ) / 1e6, "0.00" ) & "m ("
+			        & FORMAT ( DIVIDE ( _V, ABS ( _B ) ), "+0.0%;-0.0%" ) & "). "
+			        & "The largest driver is " & LOWER ( _TopLine ) & " at CHF "
+			        & FORMAT ( _TopVar / 1e6, "+0.00;-0.00" ) & "m. "
+			        & IF (
+			            _BankVar < 0,
+			            "In bank fees, " & _BankName & " is CHF " & FORMAT ( ABS ( _BankVar ) / 1e3, "0" ) & "k over budget.",
+			            "All banks are within their fee budget."
+			        )
+		displayFolder: 4 Budget vs actual
+		lineageTag: 7497dffa-eca9-4b58-b9b7-a87d2389daa4
+
+	measure 'Fees CHF' = SUM ( FactBankFees[Amount_CHF] )
+		formatString: #,0
+		displayFolder: 5 Bank fees and service
+		lineageTag: 90087ccc-dbff-4e41-9b55-918fd1053c8d
+
+	measure 'Fees PY CHF' = CALCULATE ( [Fees CHF], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )
+		formatString: #,0
+		displayFolder: 5 Bank fees and service
+		lineageTag: 9c67c722-dc40-43c5-8e4a-385d107dac89
+
+	measure 'Fees YoY %' = DIVIDE ( [Fees CHF] - [Fees PY CHF], [Fees PY CHF] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 5 Bank fees and service
+		lineageTag: 2ff4b1e7-d3d2-4205-9ab2-6a1fc3d99c02
+
+	measure 'Fees YTD CHF' =
+			VAR _End = MIN ( MAX ( 'Date'[Date] ), [Last Fee Date] )
+			RETURN CALCULATE ( [Fees CHF], DATESBETWEEN ( 'Date'[Date], DATE ( YEAR ( _End ), 1, 1 ), _End ) )
+		formatString: #,0.00
+		displayFolder: 5 Bank fees and service
+		lineageTag: 4809740b-d6c6-4a8e-ae83-c9bcc6c2878a
+
+	measure 'Fees YTD PY CHF' =
+			VAR _End = MIN ( MAX ( 'Date'[Date] ), [Last Fee Date] )
+			RETURN CALCULATE ( [Fees CHF], DATESBETWEEN ( 'Date'[Date], DATE ( YEAR ( _End ) - 1, 1, 1 ), EDATE ( _End, -12 ) ) )
+		formatString: #,0.00
+		displayFolder: 5 Bank fees and service
+		lineageTag: b52a808c-cab2-4266-b63e-c630ccfbfc80
+
+	measure 'Fees YTD YoY %' = DIVIDE ( [Fees YTD CHF] - [Fees YTD PY CHF], [Fees YTD PY CHF] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 5 Bank fees and service
+		lineageTag: 66640400-b1cb-4900-bfea-164075e37a75
+
+	measure 'Fees Rolling 3M CHF' = CALCULATE ( [Fees CHF], DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -3, MONTH ) )
+		formatString: #,0
+		displayFolder: 5 Bank fees and service
+		lineageTag: 3e89e143-d4d7-4f60-bfb3-bacbafb28329
+
+	/// Rolling 3 months against the same 3 months a year earlier. Smooths out
+	/// monthly noise, so only lasting changes such as a new tariff show up.
+	/// Blank until a full prior-year window exists and after the last fee month.
+	measure 'Fees Rolling 3M YoY %' =
+			VAR _End = MAX ( 'Date'[Date] )
+			VAR _First = CALCULATE ( MIN ( FactBankFees[FeeMonth] ), REMOVEFILTERS () )
+			VAR _Now = [Fees Rolling 3M CHF]
+			VAR _PY = CALCULATE ( [Fees Rolling 3M CHF], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )
+			RETURN
+			    IF (
+			        EOMONTH ( _End, -15 ) + 1 >= _First && _End <= [Last Fee Date] && _PY > 0,
+			        DIVIDE ( _Now, _PY ) - 1
+			    )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 5 Bank fees and service
+		lineageTag: 7f8aacf3-4c4c-44eb-9d22-e56dc54bbd90
+
+	/// Fee value on months where the rolling 3-month change exceeds 15%. Used as a marker series.
+	measure 'Fee Step Change' = IF ( ABS ( [Fees Rolling 3M YoY %] ) > 0.15, [Fees CHF] )
+		formatString: #,0
+		displayFolder: 5 Bank fees and service
+		lineageTag: a41ea8c4-5613-4656-b058-6c07cc193da1
+
+	measure 'Fees vs Budget YTD %' =
+			VAR _A = CALCULATE ( [Actual YTD CHF], FactTreasuryPnL[Line] = "Bank fees" )
+			VAR _B = CALCULATE ( [Budget YTD CHF], FactTreasuryPnL[Line] = "Bank fees" )
+			RETURN DIVIDE ( _A, _B ) - 1
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 5 Bank fees and service
+		lineageTag: e56c4120-9ea3-47e7-b653-070bcca6f5a7
+
+	measure 'Issue Count' = COUNTROWS ( FactBankIssues )
+		formatString: 0
+		displayFolder: 5 Bank fees and service
+		lineageTag: d706fbac-7edd-4c0c-b040-13efe9b75eeb
+
+	measure 'Open Issues' = CALCULATE ( [Issue Count], FactBankIssues[Status] <> "Closed" ) + 0
+		formatString: 0
+		displayFolder: 5 Bank fees and service
+		lineageTag: 13ac277c-7d8b-4e27-add1-6e097ef167b9
+
+	measure 'High Severity %' = DIVIDE ( CALCULATE ( [Issue Count], FactBankIssues[Severity] = "High" ), [Issue Count] )
+		formatString: 0%
+		displayFolder: 5 Bank fees and service
+		lineageTag: 4f3bc87e-b663-47e9-ac94-11a36f74a524
+
+	measure 'Median Days to Resolve' = MEDIAN ( FactBankIssues[ResolutionDays] )
+		formatString: 0.0
+		displayFolder: 5 Bank fees and service
+		lineageTag: cd121c05-3403-430a-88bf-3fd29686a2f3
+
+	measure 'Avg Days to Resolve' = AVERAGE ( FactBankIssues[ResolutionDays] )
+		formatString: 0.0
+		displayFolder: 5 Bank fees and service
+		lineageTag: ebb2ef2a-c742-4f56-9fbd-82f250730b2c
+
+	measure 'Deposits Placed CHF' = SUM ( FactTermDeposits[Principal_CHF] )
+		formatString: #,0
+		displayFolder: 6 Deposits and MMFs
+		lineageTag: 7a4c59b5-34fc-47f4-8bd1-de8688168e94
+
+	/// Deposits by maturity date: the inactive relationship on MaturityDate is switched on.
+	measure 'Deposits Maturing CHF' = CALCULATE ( [Deposits Placed CHF], USERELATIONSHIP ( FactTermDeposits[MaturityDate], 'Date'[Date] ) )
+		formatString: #,0
+		displayFolder: 6 Deposits and MMFs
+		lineageTag: f78a4c4e-da59-4a88-987d-167be90ead38
+
+	/// Maturity ladder: deposits still outstanding at the as-of date, by maturity month.
+	measure 'Maturity Ladder CHF' = CALCULATE ( [Deposits Maturing CHF], FactTermDeposits[Status] = "Outstanding" )
+		formatString: #,0
+		displayFolder: 6 Deposits and MMFs
+		lineageTag: b1e00dc5-5333-42d8-9d75-97cac6ca6d13
+
+	measure 'Term Deposits CHF' = CALCULATE ( [Cash CHF], FactLiquidityPosition[Instrument] = "Term deposit" )
+		formatString: #,0.0
+		displayFolder: 6 Deposits and MMFs
+		lineageTag: ebd5a764-0714-4c11-92c9-ac03fd27405e
+
+	measure 'Placed Rate %' =
+			DIVIDE (
+			    SUMX ( FactTermDeposits, FactTermDeposits[Principal_CHF] * FactTermDeposits[InterestRate_pct] ),
+			    SUM ( FactTermDeposits[Principal_CHF] )
+			) / 100
+		formatString: 0.00%
+		displayFolder: 6 Deposits and MMFs
+		lineageTag: aeb5924b-a108-462b-8b8d-6a79d33719f8
+
+	measure 'Quoted Rate %' = AVERAGE ( FactDepositQuotes[QuotedRate_pct] ) / 100
+		formatString: 0.00%
+		displayFolder: 6 Deposits and MMFs
+		lineageTag: aac66232-07dc-42fa-adfd-d29c5f5fec95
+
+	measure 'Benchmark Rate %' = AVERAGE ( MarketBenchmarkRates[Rate_pct] ) / 100
+		formatString: 0.00%
+		displayFolder: 6 Deposits and MMFs
+		lineageTag: ee1fca75-bfb6-4cbe-b077-0cc2773ec8a4
+
+	/// Placed rate against the best quote for the same month, currency and tenor,
+	/// weighted by principal. Negative = placed below the best available quote.
+	measure 'Placed vs Best Quote bps' =
+			VAR _Rows =
+			    ADDCOLUMNS (
+			        FactTermDeposits,
+			        "@Best",
+			            VAR _M = DATE ( YEAR ( FactTermDeposits[StartDate] ), MONTH ( FactTermDeposits[StartDate] ), 1 )
+			            VAR _C = FactTermDeposits[Currency]
+			            VAR _T = FactTermDeposits[Tenor]
+			            RETURN
+			                CALCULATE (
+			                    MAX ( FactDepositQuotes[QuotedRate_pct] ),
+			                    REMOVEFILTERS (),
+			                    FactDepositQuotes[QuoteMonth] = _M,
+			                    FactDepositQuotes[Currency] = _C,
+			                    FactDepositQuotes[Tenor] = _T
+			                )
+			    )
+			RETURN
+			    DIVIDE (
+			        SUMX ( _Rows, FactTermDeposits[Principal_CHF] * ( FactTermDeposits[InterestRate_pct] - [@Best] ) ),
+			        SUMX ( _Rows, FactTermDeposits[Principal_CHF] )
+			    ) * 100
+		formatString: +0.0;-0.0;0.0
+		displayFolder: 6 Deposits and MMFs
+		lineageTag: b5de6620-3c36-4d94-9e1f-7d3c61a74d91
+
+	/// Placed rate against the benchmark (SARON, €STR, SOFR) on the start date, weighted by principal.
+	measure 'Placed vs Benchmark bps' =
+			VAR _Rows =
+			    ADDCOLUMNS (
+			        FactTermDeposits,
+			        "@Bench",
+			            VAR _D = FactTermDeposits[StartDate]
+			            VAR _C = FactTermDeposits[Currency]
+			            RETURN
+			                CALCULATE (
+			                    MAX ( MarketBenchmarkRates[Rate_pct] ),
+			                    REMOVEFILTERS (),
+			                    MarketBenchmarkRates[Date] = _D,
+			                    MarketBenchmarkRates[Currency] = _C
+			                )
+			    )
+			RETURN
+			    DIVIDE (
+			        SUMX ( _Rows, FactTermDeposits[Principal_CHF] * ( FactTermDeposits[InterestRate_pct] - [@Bench] ) ),
+			        SUMX ( _Rows, FactTermDeposits[Principal_CHF] )
+			    ) * 100
+		formatString: +0.0;-0.0;0.0
+		displayFolder: 6 Deposits and MMFs
+		lineageTag: 5a5db64b-2ae6-4acc-b3b0-18e208ba529a
+
+	measure 'MMF Holdings CHF' = CALCULATE ( [Cash CHF], FactLiquidityPosition[CounterpartyType] = "Fund" )
+		formatString: #,0.0
+		displayFolder: 6 Deposits and MMFs
+		lineageTag: 9ee3505e-fdeb-407c-90e7-d4cf7f07d8f4
+
+	measure 'MMF Yield %' = AVERAGE ( FactMMFYield[Yield7d_pct] ) / 100
+		formatString: 0.00%
+		displayFolder: 6 Deposits and MMFs
+		lineageTag: 4234c53b-b955-459a-a483-d22027256646
+
+	/// Fund yield minus the benchmark of the fund's currency, averaged over funds.
+	measure 'MMF Excess Yield bps' =
+			AVERAGEX (
+			    VALUES ( DimFund[FundKey] ),
+			    VAR _Ccy = CALCULATE ( SELECTEDVALUE ( DimFund[Currency] ) )
+			    VAR _Fund = CALCULATE ( AVERAGE ( FactMMFYield[Yield7d_pct] ) )
+			    VAR _Bench = CALCULATE ( AVERAGE ( MarketBenchmarkRates[Rate_pct] ), REMOVEFILTERS ( DimCurrency ), MarketBenchmarkRates[Currency] = _Ccy )
+			    RETURN ( _Fund - _Bench ) * 100
+			)
+		formatString: +0.0;-0.0;0.0
+		displayFolder: 6 Deposits and MMFs
+		lineageTag: 878ae293-1378-438f-8879-4178b866018d
+
+	/// Share of MMF holdings in the largest fund.
+	measure 'MMF Largest Fund %' = DIVIDE ( MAXX ( VALUES ( DimFund[FundKey] ), [MMF Holdings CHF] ), [MMF Holdings CHF] )
+		formatString: 0.0%
+		displayFolder: 6 Deposits and MMFs
+		lineageTag: 6d6836dd-9e0d-40f1-8bb2-3d02a64293dc
+
+	measure 'DQ Checks Passed' = CALCULATE ( COUNTROWS ( 'Data Quality Checks' ), 'Data Quality Checks'[Failures] = 0 ) + 0
+		formatString: 0
+		displayFolder: 7 Data quality
+		lineageTag: 34c5dba3-6254-4e51-800a-b8b84ffb15bd
+
+	measure 'DQ Checks Total' = COUNTROWS ( 'Data Quality Checks' )
+		formatString: 0
+		displayFolder: 7 Data quality
+		lineageTag: d1d434c6-fdca-4e95-a5d8-feffe8cc4c95
+
+	measure 'DQ Status' = IF ( [DQ Checks Passed] = [DQ Checks Total], "All checks pass", FORMAT ( [DQ Checks Total] - [DQ Checks Passed], "0" ) & " check(s) failing" )
+		displayFolder: 7 Data quality
+		lineageTag: d0fd95fd-0d4a-4f14-b1cd-1072c4ece641
+
+	measure 'Reconciled Figures' = CALCULATE ( COUNTROWS ( Reconciliation ), Reconciliation[Status] = "Match" ) & " of " & COUNTROWS ( Reconciliation )
+		displayFolder: 7 Data quality
+		lineageTag: dca5e395-84b4-422e-8e04-1460b6c2b7b1
+
+	measure 'Last Load Date' = MAX ( FactLiquidityPosition[Date] )
+		formatString: d mmm yyyy
+		displayFolder: 7 Data quality
+		lineageTag: b4a09193-126e-4dfe-ab6b-57409cb3c795
+
+	measure 'Current User' = USERPRINCIPALNAME ()
+		displayFolder: 8 Security
+		lineageTag: 31fed5b5-89f9-4f32-8bc4-571d53e2e775
+
+	/// Last day of the last month with booked actuals.
+	measure 'Last Actual Date' = EOMONTH ( [Last Actual Month], 0 )
+		formatString: d mmm yyyy
+		displayFolder: 4 Budget vs actual
+		lineageTag: 440c89fe-9822-44bd-93ac-e61c857ab166
+
+	/// End of the year-to-date window: the end of the period in context, but never
+	/// later than the last closed month. With no date filter that is the last close.
+	measure 'YTD End Date' = MIN ( MAX ( 'Date'[Date] ), [Last Actual Date] )
+		formatString: d mmm yyyy
+		displayFolder: 4 Budget vs actual
+		lineageTag: 748a3804-d810-4df7-adae-42bd9ddd3254
+
+	/// Last day of the last month with bank fee data.
+	measure 'Last Fee Date' = EOMONTH ( CALCULATE ( MAX ( FactBankFees[FeeMonth] ), REMOVEFILTERS () ), 0 )
+		formatString: d mmm yyyy
+		displayFolder: 5 Bank fees and service
+		lineageTag: c01300bd-f6de-4c3b-9b21-6145b90face1
+
+	measure 'Fact Rows Loaded' =
+			COUNTROWS ( FactLiquidityPosition ) + COUNTROWS ( FactTermDeposits ) + COUNTROWS ( FactMMFYield )
+			    + COUNTROWS ( FactDepositQuotes ) + COUNTROWS ( FactFXDeals ) + COUNTROWS ( FactBankFees )
+			    + COUNTROWS ( FactBankIssues ) + COUNTROWS ( FactCreditSpreads ) + COUNTROWS ( FactCashForecast )
+			    + COUNTROWS ( FactTreasuryPnL )
+		formatString: #,0
+		displayFolder: 7 Data quality
+		lineageTag: 91aa905e-a05d-4bb5-9a2f-e07941ad9df6
+
+	/// Commentary line 1: result against budget for the year to date.
+	measure 'Commentary Result' =
+			VAR _End = [YTD End Date]
+			VAR _A = [Actual YTD CHF]
+			VAR _B = [Budget YTD CHF]
+			VAR _V = _A - _B
+			RETURN
+			    "Jan to " & FORMAT ( _End, "mmm yyyy" ) & ": result CHF " & FORMAT ( _A / 1e6, "0.00" )
+			        & "m vs budget CHF " & FORMAT ( _B / 1e6, "0.00" ) & "m, "
+			        & IF ( _V >= 0, "favourable", "unfavourable" ) & " by CHF " & FORMAT ( ABS ( _V ) / 1e6, "0.00" ) & "m ("
+			        & FORMAT ( DIVIDE ( _V, ABS ( _B ) ), "+0.0%;-0.0%" ) & ")."
+		displayFolder: 4 Budget vs actual\Commentary
+		lineageTag: 96647a16-54ab-4105-9149-e1b7cc2cfc62
+
+	/// Commentary line 2: the P&L line with the largest variance.
+	measure 'Commentary Driver' =
+			VAR _Lines =
+			    ADDCOLUMNS (
+			        CALCULATETABLE ( VALUES ( FactTreasuryPnL[Line] ), REMOVEFILTERS ( FactTreasuryPnL[Line] ) ),
+			        "@Var", CALCULATE ( [Variance YTD CHF] )
+			    )
+			VAR _Top = TOPN ( 1, _Lines, ABS ( [@Var] ), DESC )
+			RETURN
+			    "Largest driver: " & LOWER ( MAXX ( _Top, FactTreasuryPnL[Line] ) ) & " at CHF "
+			        & FORMAT ( MAXX ( _Top, [@Var] ) / 1e6, "+0.00;-0.00" ) & "m."
+		displayFolder: 4 Budget vs actual\Commentary
+		lineageTag: 124bb0ee-e0f8-49c4-a79e-811c5f19a39a
+
+	/// Commentary line 3: the bank most over its fee budget.
+	measure 'Commentary Fees' =
+			VAR _Banks =
+			    ADDCOLUMNS (
+			        VALUES ( DimBank[BankLabel] ),
+			        "@FeeVar", CALCULATE ( [Variance YTD CHF], FactTreasuryPnL[Line] = "Bank fees" )
+			    )
+			VAR _Worst = TOPN ( 1, _Banks, [@FeeVar], ASC )
+			VAR _Var = MAXX ( _Worst, [@FeeVar] )
+			RETURN
+			    IF (
+			        _Var < 0,
+			        "Bank fees: " & MAXX ( _Worst, DimBank[BankLabel] ) & " is CHF " & FORMAT ( ABS ( _Var ) / 1e3, "0" ) & "k over budget.",
+			        "Bank fees: every bank is within budget."
+			    )
+		displayFolder: 4 Budget vs actual\Commentary
+		lineageTag: 2e64bea0-212b-47c7-b275-75ea4c624df3
+
+	/// One commentary sentence per row of Commentary Lines.
+	measure 'Commentary Text' =
+			SWITCH (
+			    SELECTEDVALUE ( 'Commentary Lines'[No] ),
+			    1, [Commentary Result],
+			    2, [Commentary Driver],
+			    3, [Commentary Fees]
+			)
+		displayFolder: 4 Budget vs actual\Commentary
+		lineageTag: 2f4bddf1-276f-4aee-ab47-8810f5e85d03
+
+	/// Short name of the latest reforecast for a card, e.g. "Q2".
+	measure 'Latest Forecast Label' = SUBSTITUTE ( [Latest Forecast], "Forecast ", "" )
+		displayFolder: 4 Budget vs actual
+		lineageTag: bc7bd97b-d630-4bfc-893e-fd17c2d394d6
+
+	/// Last closed month for a card, e.g. "Sep 2026".
+	measure 'Actuals To' = FORMAT ( [Last Actual Date], "mmm yyyy" )
+		displayFolder: 4 Budget vs actual
+		lineageTag: 067d694e-a77d-4991-a55e-ebd9a53bd7a4
+
+	column Column1
+		dataType: string
+		lineageTag: 67a18a03-ae0c-44f8-b9be-a87e084aea8d
+		summarizeBy: none
+		sourceColumn: Column1
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

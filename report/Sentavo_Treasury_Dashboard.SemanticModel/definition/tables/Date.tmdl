@@ -1,0 +1,95 @@
+table Date
+	lineageTag: 2bbc2f70-656a-4c1a-97ce-a33775b7ff80
+	dataCategory: Time
+
+	column Date
+		isKey
+		formatString: General Date
+		lineageTag: b2fc6046-b6e5-43a5-bf9d-8f63a5510138
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		formatString: 0
+		lineageTag: 70da6ab2-f81c-4d35-b6d8-a70cafed7678
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthStart
+		formatString: General Date
+		lineageTag: e3456107-9376-41c0-9f35-4ff51c863efd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MonthStart]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		lineageTag: 5d5fdbfa-0bcc-43e7-8452-32d7a82d944c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month]
+		sortByColumn: MonthStart
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		lineageTag: 2bccfbe4-bcb6-48a0-b958-80349a215c06
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekStart
+		formatString: General Date
+		lineageTag: a0e29bbf-b075-46c0-906a-537d9d9951d4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [WeekStart]
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsWeekday
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: faf75540-b3d1-436b-96b2-5536e995fcd5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [IsWeekday]
+
+		annotation SummarizationSetBy = Automatic
+
+	/// 1 for months with booked actuals. Budget and forecast comparisons stop here.
+	column IsClosedMonth =
+			VAR _Last = MAXX ( FILTER ( FactTreasuryPnL, FactTreasuryPnL[Scenario] = "Actual" ), FactTreasuryPnL[Month] )
+			RETURN IF ( 'Date'[Date] <= EOMONTH ( _Last, 0 ), 1, 0 )
+		dataType: int64
+		formatString: 0
+		lineageTag: a3a3793c-a154-4793-ba04-955cfb694443
+		summarizeBy: none
+
+	column MonthNo = MONTH ( 'Date'[Date] )
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e72443a3-74d7-48c0-962b-6afd9cf3a63d
+		summarizeBy: none
+
+	column MonthShort = FORMAT ( 'Date'[Date], "MMM" )
+		dataType: string
+		lineageTag: 78731b15-4649-420f-a3ea-3aca52f08c67
+		summarizeBy: none
+		sortByColumn: MonthNo
+
+	partition Date = calculated
+		mode: import
+		source = ADDCOLUMNS ( CALENDAR ( DATE ( 2024, 1, 1 ), DATE ( 2027, 12, 31 ) ), "Year", YEAR ( [Date] ), "MonthStart", DATE ( YEAR ( [Date] ), MONTH ( [Date] ), 1 ), "Month", FORMAT ( [Date], "MMM yyyy" ), "Quarter", "Q" & QUARTER ( [Date] ) & " " & YEAR ( [Date] ), "WeekStart", [Date] - WEEKDAY ( [Date], 2 ) + 1, "IsWeekday", WEEKDAY ( [Date], 2 ) <= 5)
+
+	annotation PBI_Id = b9502699fdc44e9397eed0e47f2fe6eb
+

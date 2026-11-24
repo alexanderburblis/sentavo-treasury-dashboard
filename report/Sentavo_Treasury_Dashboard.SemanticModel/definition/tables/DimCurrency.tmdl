@@ -1,0 +1,35 @@
+table DimCurrency
+	lineageTag: f452968a-9002-4c06-9820-b20e1aa481cf
+
+	column CurrencyCode
+		dataType: string
+		lineageTag: dd2bdd87-0595-4b67-b73f-c1120dcf5f88
+		summarizeBy: none
+		sourceColumn: CurrencyCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyName
+		dataType: string
+		lineageTag: c87c3392-aa9a-4f65-87e6-904c9ee1fc6a
+		summarizeBy: none
+		sourceColumn: CurrencyName
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimCurrency = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    DimCurrency_Sheet = Source{[Item="DimCurrency",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(DimCurrency_Sheet,{{"Column1", type text}, {"Column2", type text}}),
+				    #"Removed Top Rows" = Table.Skip(#"Changed Type",1),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Top Rows",{{"Column1", "CurrencyCode"}, {"Column2", "CurrencyName"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

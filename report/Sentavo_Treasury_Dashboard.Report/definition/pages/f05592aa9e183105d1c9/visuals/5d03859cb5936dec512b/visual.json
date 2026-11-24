@@ -1,0 +1,162 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "5d03859cb5936dec512b",
+  "position": {
+    "x": 16,
+    "y": 388,
+    "z": 5000,
+    "height": 316,
+    "width": 1248,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactBankIssues"
+                    }
+                  },
+                  "Property": "IssueID"
+                }
+              },
+              "queryRef": "FactBankIssues.IssueID",
+              "nativeQueryRef": "IssueID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactBankIssues"
+                    }
+                  },
+                  "Property": "OpenDate"
+                }
+              },
+              "queryRef": "FactBankIssues.OpenDate",
+              "nativeQueryRef": "OpenDate"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactBankIssues"
+                    }
+                  },
+                  "Property": "Area"
+                }
+              },
+              "queryRef": "FactBankIssues.Area",
+              "nativeQueryRef": "Area"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactBankIssues"
+                    }
+                  },
+                  "Property": "Description"
+                }
+              },
+              "queryRef": "FactBankIssues.Description",
+              "nativeQueryRef": "Description"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactBankIssues"
+                    }
+                  },
+                  "Property": "Severity"
+                }
+              },
+              "queryRef": "FactBankIssues.Severity",
+              "nativeQueryRef": "Severity"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactBankIssues"
+                    }
+                  },
+                  "Property": "Status"
+                }
+              },
+              "queryRef": "FactBankIssues.Status",
+              "nativeQueryRef": "Status"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactBankIssues"
+                    }
+                  },
+                  "Property": "ResolutionDays"
+                }
+              },
+              "queryRef": "FactBankIssues.ResolutionDays",
+              "nativeQueryRef": "ResolutionDays"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "FactBankIssues"
+                  }
+                },
+                "Property": "OpenDate"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Issue log'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

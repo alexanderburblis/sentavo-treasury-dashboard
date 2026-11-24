@@ -1,0 +1,13 @@
+/// Each user sees the entities mapped to them in SecurityUserEntity.
+role 'Entity CFO (dynamic)'
+	modelPermission: read
+
+	tablePermission DimEntity =
+			DimEntity[EntityKey]
+			    IN CALCULATETABLE (
+			        VALUES ( SecurityUserEntity[EntityKey] ),
+			        SecurityUserEntity[UserPrincipalName] = USERPRINCIPALNAME ()
+			    )
+
+	annotation PBI_Id = ac0e0455138c4f2b8aec90e99fe8cb25
+

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "6d8e8f7689203ee0dce7",
+  "position": {
+    "x": 264,
+    "y": 14,
+    "z": 1000,
+    "height": 90,
+    "width": 240,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "MMF Holdings CHF"
+                }
+              },
+              "queryRef": "_Measures.MMF Holdings CHF",
+              "nativeQueryRef": "MMF Holdings CHF",
+              "displayName": "MMF holdings today"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

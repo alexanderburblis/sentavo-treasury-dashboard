@@ -1,0 +1,55 @@
+table MarketBenchmarkRates
+	lineageTag: 0c2082f0-dd55-445f-a1fc-521cd99050df
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 4c7bb23e-a44a-4c76-9b98-6bfed1965d3f
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Benchmark
+		dataType: string
+		lineageTag: 4363b96f-ce73-412c-a9b8-15dc43becc37
+		summarizeBy: none
+		sourceColumn: Benchmark
+
+		annotation SummarizationSetBy = Automatic
+
+	column Currency
+		dataType: string
+		lineageTag: a9e21b29-d519-43e1-a772-ef70d9d40405
+		summarizeBy: none
+		sourceColumn: Currency
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rate_pct
+		dataType: double
+		lineageTag: 69ffbd61-48e7-4c8c-a14f-28c67e884a84
+		summarizeBy: sum
+		sourceColumn: Rate_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition MarketBenchmarkRates = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFile), null, true),
+				    MarketBenchmarkRates_Sheet = Source{[Item="MarketBenchmarkRates",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(MarketBenchmarkRates_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Benchmark", type text}, {"Currency", type text}, {"Rate_pct", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
