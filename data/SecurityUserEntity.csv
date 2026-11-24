@@ -1,0 +1,16 @@
+UserPrincipalName,EntityKey
+group.treasurer@sentavo.example,SIG-CH01
+group.treasurer@sentavo.example,SIG-CH02
+group.treasurer@sentavo.example,SIG-DE01
+group.treasurer@sentavo.example,SIG-FR01
+group.treasurer@sentavo.example,SIG-IT01
+group.treasurer@sentavo.example,SIG-PL01
+group.treasurer@sentavo.example,SIG-US01
+group.treasurer@sentavo.example,SIG-SG01
+cfo.ch@sentavo.example,SIG-CH02
+cfo.de@sentavo.example,SIG-DE01
+cfo.de@sentavo.example,SIG-FR01
+cfo.de@sentavo.example,SIG-IT01
+cfo.pl@sentavo.example,SIG-PL01
+cfo.us@sentavo.example,SIG-US01
+cfo.apac@sentavo.example,SIG-SG01

@@ -10,8 +10,12 @@ Nothing in this dataset comes from a real company, bank or market feed.
 Banks are anonymised by role (Core Bank 1-4, Regional Bank CH/PL/SG).
 Interest-rate and FX paths are illustrative and are not market data.
 
-Run:  python generate_data.py
-Out:  ../data/sentavo_treasury_dataset.xlsx  (+ one CSV per table)
+Run:  python src/generate_data.py
+Out:  data/sentavo_treasury_dataset.xlsx  (+ one CSV per table)
+
+Tables: dimensions, daily positions, deals, fees, issues, spreads, the 13-week
+cash forecast, a monthly treasury P&L (actual, budget, Q1 and Q2 reforecasts)
+and a user-to-entity table for row-level security.
 """
 
 from pathlib import Path
@@ -501,6 +505,139 @@ cash_forecast["Direction"] = np.where(cash_forecast["Actual_CHF"] + cash_forecas
 
 
 # ---------------------------------------------------------------------------
+# Treasury P&L: actual, budget and reforecasts (monthly)
+# ---------------------------------------------------------------------------
+# Built from the tables above, so actuals tie back to deposits, MMF holdings,
+# FX deals and bank fees. A separate random stream keeps every table above
+# identical to earlier versions of the dataset.
+#
+# Sign convention: income positive, cost negative. Variance = actual - plan,
+# so a positive variance is always favourable.
+rng_plan = np.random.default_rng(SEED + 1)
+CAL = pd.date_range(START, END, freq="D")                  # calendar days for accruals
+fx_cal = {c: s.reindex(CAL).ffill() for c, s in fx.items()}
+month_of = lambda s: s.dt.to_period("M").dt.to_timestamp()
+
+# 1 Interest income -----------------------------------------------------------
+# Term deposits: daily accrual principal x rate / 360, booked to the month it accrues in.
+td_acc = []
+for _, x in deposits.iterrows():
+    days = CAL[(CAL >= x["StartDate"]) & (CAL < x["MaturityDate"])]
+    if len(days) == 0:
+        continue
+    td_acc.append(pd.DataFrame({
+        "Date": days, "EntityKey": x["EntityKey"], "BankKey": x["BankKey"], "Category": "Term deposits",
+        "Amount_CHF": x["Principal_LC"] * x["InterestRate_pct"] / 100 / 360 * fx_cal[x["Currency"]][days].values,
+    }))
+def to_calendar(df, keys, value_cols):
+    """Carry business-day rows over weekends and holidays, per key."""
+    out = []
+    for k, g in df.groupby(keys):
+        g = g.set_index("Date")[value_cols].reindex(CAL).ffill().dropna()
+        g.index.name = "Date"
+        g = g.reset_index()
+        for col, val in zip(keys, k if isinstance(k, tuple) else (k,)):
+            g[col] = val
+        out.append(g)
+    return pd.concat(out, ignore_index=True)
+
+def chf(df, amount):
+    rate = np.array([fx_cal[c][d] for c, d in zip(df["Currency"], df["Date"])])
+    return amount * rate
+
+# MMFs: holding x 7-day yield / 365, carried over weekends.
+mmf_cal = to_calendar(mmf_pos.merge(mmf_yields, on=["Date", "FundKey"]),
+                      ["FundKey", "BankKey", "Currency"], ["Balance_LC", "Yield7d_pct"])
+mmf_cal["Amount_CHF"] = chf(mmf_cal, mmf_cal["Balance_LC"] * mmf_cal["Yield7d_pct"] / 100 / 365)
+mmf_cal["EntityKey"], mmf_cal["Category"] = "SIG-CH01", "Money market funds"
+# Notice accounts pay the benchmark less 10 bps, floored at zero. Current accounts pay nothing.
+notice = to_calendar(acct_pos[acct_pos["Instrument"] == "Notice account"],
+                     ["EntityKey", "BankKey", "Currency"], ["Balance_LC"])
+bench_cal = {c: s.reindex(CAL).ffill() for c, s in BENCH.items()}
+notice["Rate"] = [max(bench_cal[c][d] - 0.10, 0.0) for c, d in zip(notice["Currency"], notice["Date"])]
+notice["Amount_CHF"] = chf(notice, notice["Balance_LC"] * notice["Rate"] / 100 / 365)
+notice["Category"] = "Notice accounts"
+
+pnl_cols = ["Month", "EntityKey", "BankKey", "Line", "Category", "Amount_CHF"]
+interest = pd.concat(td_acc + [mmf_cal, notice], ignore_index=True).dropna(subset=["Amount_CHF"])
+interest["Month"], interest["Line"] = month_of(interest["Date"]), "Interest income"
+
+# 2 Bank fees -------------------------------------------------------------------
+# Billed per bank; allocated to entities by the number of accounts each holds there.
+acct_df = pd.DataFrame(accounts, columns=["EntityKey", "BankKey", "Currency", "Instrument", "_mu", "_sd"])
+alloc = acct_df.groupby(["BankKey", "EntityKey"]).size().rename("n").reset_index()
+alloc["Share"] = alloc["n"] / alloc.groupby("BankKey")["n"].transform("sum")
+fees_pnl = bank_fees.merge(alloc[["BankKey", "EntityKey", "Share"]], on="BankKey")
+fees_pnl = fees_pnl.assign(Month=fees_pnl["FeeMonth"], Line="Bank fees", Category=fees_pnl["FeeCategory"],
+                           Amount_CHF=-fees_pnl["Amount_CHF"] * fees_pnl["Share"])
+
+# 3 FX cost ---------------------------------------------------------------------
+# Half the quoted bid-ask spread on the CHF notional, booked in the trade month.
+fx_pnl = fx_deals.assign(Month=month_of(fx_deals["TradeDate"]), Line="FX cost", Category=fx_deals["CurrencyPair"],
+                         Amount_CHF=-fx_deals["Notional_CHF"] * fx_deals["Spread_bps"] / 2 / 10_000)
+
+actual_pnl = (pd.concat([interest[pnl_cols], fees_pnl[pnl_cols], fx_pnl[pnl_cols]])
+              .groupby(pnl_cols[:-1], as_index=False)["Amount_CHF"].sum())
+actual_pnl["Scenario"] = "Actual"
+
+# 4 Budget ----------------------------------------------------------------------
+# Each budget is built in the autumn before the year, on the run rate of the
+# three months before it, plus planning assumptions:
+#   rates are held flat (the 2025 budget therefore misses the SARON and €STR cuts),
+#   fees +2% for tariff inflation, FX volumes +3%.
+# The 2026 budget does not know about Core Bank 3's January payment tariff increase.
+BUDGET_BASE = {2025: ("2024-10-01", "2024-12-01"), 2026: ("2025-07-01", "2025-09-01")}
+UPLIFT = {"Interest income": 1.00, "Bank fees": 1.02, "FX cost": 1.03}
+keys = ["EntityKey", "BankKey", "Line", "Category"]
+plan_rows = []
+for yr, (b0, b1) in BUDGET_BASE.items():
+    base = actual_pnl[actual_pnl["Month"].between(b0, b1)]
+    run = base.groupby(keys)["Amount_CHF"].sum() / 3
+    for m in pd.date_range(f"{yr}-01-01", f"{yr}-12-01", freq="MS"):
+        b = run.reset_index()
+        b["Amount_CHF"] = b["Amount_CHF"] * b["Line"].map(UPLIFT)
+        b["Month"], b["Scenario"] = m, "Budget"
+        plan_rows.append(b)
+
+# 5 Reforecasts -----------------------------------------------------------------
+# Q1 forecast (built in April): actuals for Jan-Mar, then the Jan-Mar run rate.
+# Q2 forecast (built in July):  actuals for Jan-Jun, then the Apr-Jun run rate.
+for yr in (2025, 2026):
+    for name, closed_to, run_from in (("Forecast Q1", 3, 1), ("Forecast Q2", 6, 4)):
+        ytd = actual_pnl[(actual_pnl["Month"].dt.year == yr) & (actual_pnl["Month"].dt.month <= closed_to)]
+        run = (ytd[ytd["Month"].dt.month >= run_from].groupby(keys)["Amount_CHF"].sum() /
+               (closed_to - run_from + 1))
+        plan_rows.append(ytd.assign(Scenario=name))
+        for mm in range(closed_to + 1, 13):
+            f = run.reset_index()
+            f["Amount_CHF"] = f["Amount_CHF"] * (1 + rng_plan.normal(0, 0.02, len(f)))
+            f["Month"], f["Scenario"] = pd.Timestamp(yr, mm, 1), name
+            plan_rows.append(f)
+
+treasury_pnl = pd.concat([actual_pnl] + plan_rows, ignore_index=True)
+treasury_pnl["Amount_CHF"] = treasury_pnl["Amount_CHF"].round(2)
+treasury_pnl = (treasury_pnl[["Month", "Scenario", "EntityKey", "BankKey", "Line", "Category", "Amount_CHF"]]
+                .sort_values(["Scenario", "Month", "Line", "EntityKey", "BankKey", "Category"])
+                .reset_index(drop=True))
+dim_scenario = pd.DataFrame([
+    ("Actual", 1, "Booked"), ("Budget", 2, "Plan"),
+    ("Forecast Q1", 3, "Reforecast"), ("Forecast Q2", 4, "Reforecast"),
+], columns=["Scenario", "ScenarioSort", "ScenarioType"])
+
+# ---------------------------------------------------------------------------
+# Row-level security: user-to-entity mapping (fictional users)
+# ---------------------------------------------------------------------------
+security_user_entity = pd.DataFrame(
+    [("group.treasurer@sentavo.example", e) for e in dim_entity["EntityKey"]] +
+    [("cfo.ch@sentavo.example", "SIG-CH02"),
+     ("cfo.de@sentavo.example", "SIG-DE01"), ("cfo.de@sentavo.example", "SIG-FR01"),
+     ("cfo.de@sentavo.example", "SIG-IT01"),
+     ("cfo.pl@sentavo.example", "SIG-PL01"),
+     ("cfo.us@sentavo.example", "SIG-US01"), ("cfo.apac@sentavo.example", "SIG-SG01")],
+    columns=["UserPrincipalName", "EntityKey"])
+
+
+# ---------------------------------------------------------------------------
 # Write output
 # ---------------------------------------------------------------------------
 dim_bank_out = dim_bank.drop(columns=["_spread_base"])
@@ -522,6 +659,9 @@ tables = {
     "FactCashForecast": cash_forecast,
     "MarketBenchmarkRates": benchmark_rates,
     "MarketFXRates": fx_rates,
+    "DimScenario": dim_scenario,
+    "FactTreasuryPnL": treasury_pnl,
+    "SecurityUserEntity": security_user_entity,
 }
 
 about = pd.DataFrame({"About this dataset": [
