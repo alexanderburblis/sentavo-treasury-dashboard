@@ -1,5 +1,5 @@
 // Sentavo Treasury Control Tower: measures
-// All measures live in the _Measures table, in display folders 1 to 8.
+// All measures live in the _Measures table, in display folders 1 to 9.
 // Reporting currency is CHF. The model itself is saved as a Power BI Project:
 // report/Sentavo_Treasury_Dashboard.SemanticModel/definition (TMDL). This file
 // is a readable copy of the measures, the calculation group and the RLS roles.
@@ -83,6 +83,18 @@ SWITCH (
 Credit Spread bps =
 AVERAGE ( FactCreditSpreads[CreditSpread_bps] )
 
+Selected Bank = SELECTEDVALUE ( DimBank[BankLabel], "All banks" )
+
+Bank Rating Outlook = SELECTEDVALUE ( DimBank[Rating] ) & ", " & LOWER ( SELECTEDVALUE ( DimBank[Outlook] ) ) & " outlook"
+
+// Business days over the limit across the whole period, whatever date is in context.
+Days Over Limit Total = CALCULATE ( [Days Over Limit], REMOVEFILTERS ( 'Date' ) ) + 0
+
+Tooltip Date = FORMAT ( MAX ( FactLiquidityPosition[Date] ), "d mmm yyyy" )
+
+// Dynamic title for the Bank Detail page.
+Bank Detail Title = [Selected Bank] & ": monthly fees (CHF)"
+
 
 // ============================================================
 // 3 Forecast
@@ -141,6 +153,8 @@ Cum Fcst 13W CHF =
             )
         )
 
+// Running total over the last 13 forecast weeks. The current week is capped at
+// the last forecast week, so a card with no date filter shows the full window.
 Cum Fcst 1W CHF =
     VAR _Last  = CALCULATE ( MAX ( FactCashForecast[WeekStart] ), REMOVEFILTERS () )
     VAR _Start = _Last - 84
@@ -157,6 +171,8 @@ Cum Fcst 1W CHF =
             )
         )
 
+// Running total over the last 13 forecast weeks. The current week is capped at
+// the last forecast week, so a card with no date filter shows the full window.
 Cum Actual CHF =
     VAR _Last  = CALCULATE ( MAX ( FactCashForecast[WeekStart] ), REMOVEFILTERS () )
     VAR _Start = _Last - 84
@@ -209,10 +225,14 @@ VAR _A =
 RETURN
     DIVIDE ( _F - _A, _A )
 
+// Forecast error of the 13-week-ahead forecast, per week or period in context.
+WAPE 13W % = CALCULATE ( [Forecast WAPE %], FactCashForecast[HorizonWeeks] = 13 )
+
+WAPE 1W % = CALCULATE ( [Forecast WAPE %], FactCashForecast[HorizonWeeks] = 1 )
 
 
 // ============================================================
-// 4 Budget vs actual (treasury P&L)
+// 4 Budget vs actual
 // ============================================================
 
 // Last month with booked actuals.
@@ -394,7 +414,6 @@ Actuals To =
     FORMAT ( [Last Actual Date], "mmm yyyy" )
 
 
-
 // ============================================================
 // 5 Bank fees and service
 // ============================================================
@@ -463,7 +482,6 @@ Avg Days to Resolve =
 // Last day of the last month with bank fee data.
 Last Fee Date =
     EOMONTH ( CALCULATE ( MAX ( FactBankFees[FeeMonth] ), REMOVEFILTERS () ), 0 )
-
 
 
 // ============================================================
@@ -564,7 +582,6 @@ MMF Largest Fund % =
     DIVIDE ( MAXX ( VALUES ( DimFund[FundKey] ), [MMF Holdings CHF] ), [MMF Holdings CHF] )
 
 
-
 // ============================================================
 // 7 Data quality
 // ============================================================
@@ -591,7 +608,6 @@ Fact Rows Loaded =
         + COUNTROWS ( FactTreasuryPnL )
 
 
-
 // ============================================================
 // 8 Security
 // ============================================================
@@ -599,6 +615,27 @@ Fact Rows Loaded =
 Current User =
     USERPRINCIPALNAME ()
 
+
+// ============================================================
+// 9 FX execution
+// ============================================================
+
+FX Volume CHF = SUM ( FactFXDeals[Notional_CHF] )
+
+FX Deals = COUNTROWS ( FactFXDeals )
+
+// Bid-ask spread weighted by CHF notional.
+FX Spread bps = DIVIDE ( SUMX ( FactFXDeals, FactFXDeals[Notional_CHF] * FactFXDeals[Spread_bps] ), SUM ( FactFXDeals[Notional_CHF] ) )
+
+// Half the spread on each deal, the same basis as FX cost in the treasury P&L.
+FX Cost CHF = SUMX ( FactFXDeals, FactFXDeals[Notional_CHF] * FactFXDeals[Spread_bps] / 2 / 10000 )
+
+FX Platform Share % = DIVIDE ( CALCULATE ( [FX Volume CHF], FactFXDeals[ExecutionChannel] = "Multi-bank platform" ), [FX Volume CHF] )
+
+FX Share of Wallet % = DIVIDE ( [FX Volume CHF], CALCULATE ( [FX Volume CHF], REMOVEFILTERS ( DimBank ) ) )
+
+// FX volume in CHF millions, for tables.
+FX Volume CHF m = DIVIDE ( [FX Volume CHF], 1e6 )
 
 
 // ============================================================
@@ -649,7 +686,6 @@ Current User =
             DIVIDE ( _A - _B, ABS ( _B ) ),
             SELECTEDMEASURE ()
         )
-    formatStringDefinition = IF ( ISSELECTEDMEASURE ( [PnL Amount CHF], [PnL Amount YTD CHF] ), "+0.0%;-0.0%;0.0%", SELECTEDMEASUREFORMATSTRING () )
 
 // Format string of 'Variance %':
 //     IF ( ISSELECTEDMEASURE ( [PnL Amount CHF], [PnL Amount YTD CHF] ), "+0.0%;-0.0%;0.0%", SELECTEDMEASUREFORMATSTRING () )

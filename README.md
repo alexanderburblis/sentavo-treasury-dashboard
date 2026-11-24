@@ -1,6 +1,6 @@
-# Treasury Control Tower: liquidity, bank limits, budget and forecast quality (Power BI)
+# Treasury Control Tower: liquidity, bank limits, budget, FX and forecast quality (Power BI)
 
-A five-page Power BI report for a corporate Group Treasury, built on a synthetic dataset. It answers the questions a treasurer asks every week and every month: where is our cash, are we inside our bank limits, can we trust the 13-week forecast, how is the treasury result tracking against budget, what do our banks cost us, and are we placing deposits at good rates?
+A six-page Power BI report for a corporate Group Treasury, built on a synthetic dataset. It answers the questions a treasurer asks every week and every month: where is our cash, are we inside our bank limits, can we trust the 13-week forecast, how is the treasury result tracking against budget, what do our banks cost us, are we placing deposits at good rates, and are we paying too much to trade FX?
 
 I can't share real treasury data, so the company is fictional and everything is generated. The model, the measures and the checks are the same kind I'd use on real data.
 
@@ -16,10 +16,14 @@ I can't share real treasury data, so the company is fictional and everything is 
 | [2 Budget vs Actual](report/screenshots/2_budget_vs_actual.png) | Treasury result (interest income, bank fees, FX cost) against budget and the latest reforecast, by month, line and entity, with full-year outturn and a written variance commentary | Time intelligence, a calculation group for Actual / Budget / Forecast / Variance / Variance %, dynamic commentary in DAX |
 | [3 Bank Fees & Service](report/screenshots/3_bank_fees_and_service.png) | Fees by bank and category against the prior year, lasting price changes, open issues and days to resolve | Year-on-year and rolling 3-month measures, drill-through to a bank detail page |
 | [4 Deposits & MMFs](report/screenshots/4_deposits_and_mmfs.png) | Maturity ladder, placed rate against bank quotes and the benchmark, money market fund yield and concentration | `USERELATIONSHIP` on the inactive maturity-date relationship |
-| [5 Data Quality](report/screenshots/5_data_quality.png) | Key, value and security checks, and the README figures recalculated in DAX | Calculated tables evaluated at refresh |
-| Bank Detail (drill-through) | Monthly fees by category and the issue log for one bank | Drill-through on `DimBank[BankLabel]` |
+| [5 FX Execution](report/screenshots/5_fx_execution.png) | FX volume, spread and half-spread cost by currency pair, bank, deal size and channel, and each bank's share of wallet | Notional-weighted spread, `REMOVEFILTERS` for share of wallet, a sort-by column for deal-size bands |
+| [6 Data & Forecast Quality](report/screenshots/6_data_and_forecast_quality.png) | Key, value and security checks, the README figures recalculated in DAX, and the weekly 13-week forecast error | Calculated tables evaluated at refresh, Power BI anomaly detection on the error line |
+| [Bank Detail](report/screenshots/8_bank_detail_drillthrough.png) (drill-through) | Monthly fees with an expected range, fees by category and the issue log for one bank | Drill-through on `DimBank[BankLabel]`, anomaly detection, a title written by a measure |
+| Bank Tooltip (report-page tooltip) | Exposure, limit, utilisation, spread, rating and days over limit for the bank under the cursor | Tooltip page on the utilisation chart |
 
-Row-level security has two roles on `DimEntity`: a static *Entity CFO – Poland* role and a dynamic *Entity CFO (dynamic)* role that reads a user-to-entity table with `USERPRINCIPALNAME()`. [Viewed as the Polish CFO](report/screenshots/6_row_level_security_view_as.png), the report shows CHF 9.7m of cash at one entity and two banks instead of CHF 517m across the group.
+Page 1 has a bookmark navigator with three views: *All data*, *Scenario: Polish bank breach* (Regional Bank PL only) and *Scenario: Holding company* (the in-house bank entity only). [The breach view with the bank tooltip](report/screenshots/7_scenario_polish_bank_breach_tooltip.png) shows one day of the breach: Regional Bank PL at 101% of its CHF 12m limit, rated BBB+ with a stable outlook, and 41 business days over the limit in total.
+
+Row-level security has two roles on `DimEntity`: a static *Entity CFO – Poland* role and a dynamic *Entity CFO (dynamic)* role that reads a user-to-entity table with `USERPRINCIPALNAME()`. [Viewed as the Polish CFO](report/screenshots/9_row_level_security_view_as.png), the report shows CHF 9.7m of cash at one entity and two banks instead of CHF 517m across the group.
 
 ## What I found in the data
 
@@ -28,6 +32,7 @@ Row-level security has two roles on `DimEntity`: a static *Entity CFO – Poland
 - **Forecast accuracy decays with distance, and receipts are optimistic.** WAPE is 4.5% at one week, 8.4% at four weeks and 15.7% at 13 weeks. Customer receipts are forecast 5.3% too high at 13 weeks. Over the last 13 weeks the 13-week-ahead forecast showed a cumulative net outflow of CHF 14.8m where the actual was CHF 39.1m.
 - **The budget assumed rates would hold, and they didn't.** 2025 interest income was CHF 7.16m against a budget of CHF 9.76m, because SARON and €STR were cut through the year. In 2026 to September the treasury result is CHF 3.28m against CHF 4.09m budgeted, CHF 0.82m (20%) short, and interest income explains CHF 0.87m of it. The full-year outturn (actuals to September plus the Q2 reforecast) is CHF 4.30m against a budget of CHF 5.46m.
 - **Total bank fees look flat, but two banks moved.** Fees for January to September 2026 are 1.3% above the prior year and 0.6% under budget. Underneath, Core Bank 3's payment fees are 35% higher after its January tariff increase (16% over its fee budget), and Core Bank 1's connectivity fees are 17% lower after the July 2025 renegotiation. A rolling 3-month comparison flags exactly these two and no noise.
+- **FX cost is driven by the pair and the bank, not the channel.** 749 deals for CHF 2.80bn were traded at an average spread of 3.23 bps (weighted by notional), a half-spread cost of about CHF 452k. 84.3% of the volume goes through the multi-bank platform. EUR/PLN costs 10.65 bps against 1.54 bps for EUR/USD, and Regional Bank PL charges 13.38 bps against 2.30 bps at Core Bank 1. Within each pair, phone and platform prices are less than 1 bp apart, so the saving is in routing PLN flows to a cheaper bank, not in moving more deals onto the platform.
 - **Deposits are placed slightly below the best quote.** Weighted by principal, deposits were placed 3.7 bps below the best quote for the same month, currency and tenor, and 3.9 bps above the benchmark. Three in four deals did not get the best quote of the month, which is the case for a quote-comparison check before each placement. CHF 132.2m is outstanding, maturing between October 2026 and August 2027.
 
 These come from scenarios built into the generator, so the data has something to find (see below). The point is the model, the measures and the checks, not the story.
@@ -38,15 +43,15 @@ Every figure in this README is calculated three times, independently:
 
 | Where | How | Run |
 |---|---|---|
-| DAX, in the report | The measures on the pages. The *Data Quality* page also recalculates ten headline figures at refresh and compares them with this README. | Open the report |
+| DAX, in the report | The measures on the pages. The *Data & Forecast Quality* page also recalculates ten headline figures at refresh and compares them with this README. | Open the report |
 | SQL | DuckDB views over the CSV files in [`sql/`](sql). `src/run_sql_checks.py` compares every README figure with the SQL result and runs the data-quality checks. | `python src/run_sql_checks.py` |
 | pandas | `src/reconcile_dashboard.py` recomputes the same figures with pandas. | `python src/reconcile_dashboard.py data` |
 
-`pytest` compares SQL with pandas for every figure and both with the values in [`src/expected_figures.py`](src/expected_figures.py), which are the numbers quoted above. It also checks that the P&L actuals tie back to the fee and FX deal tables, that the reforecasts carry actuals for closed months, and that the fee step-change view finds exactly the two built-in price changes. If the README and the data drift apart, a test fails.
+`pytest` compares SQL with pandas for every figure and both with the values in [`src/expected_figures.py`](src/expected_figures.py), which are the numbers quoted above. It also checks that the P&L actuals tie back to the fee and FX deal tables, that the reforecasts carry actuals for closed months, that the fee step-change view finds exactly the two built-in price changes, and that the FX channel gap within each pair stays under 1 bp. If the README and the data drift apart, a test fails.
 
 ```bash
 pip install -r requirements.txt
-python -m pytest -q          # 82 tests
+python -m pytest -q          # 102 tests
 ```
 
 ## SQL layer
@@ -62,6 +67,7 @@ The views in [`sql/`](sql) read the CSV files directly (DuckDB, no server):
 | `05_forecast_quality.sql` | WAPE by horizon, receipts bias, cumulative net cash flow over the last 13 weeks |
 | `06_data_quality.sql` | Orphan keys, negative balances, duplicates and other checks, table row counts |
 | `07_deposits.sql` | Deposit pricing against the best quote and the benchmark, maturity ladder |
+| `08_fx_execution.sql` | FX volume, notional-weighted spread and half-spread cost by pair, bank (with share of wallet) and pair × channel |
 
 ## Data model
 
@@ -92,7 +98,7 @@ The treasury P&L is built from the other tables, so actuals tie back to them: in
 
 ## Measures
 
-88 measures in eight display folders, plus a calculation group and two roles. The model is saved as a Power BI Project, so every measure is a text file under [`report/Sentavo_Treasury_Dashboard.SemanticModel/definition`](report/Sentavo_Treasury_Dashboard.SemanticModel/definition). [`dax/measures.dax`](dax/measures.dax) is a readable copy. The ones worth a look:
+102 measures in nine display folders, plus a calculation group and two roles. The model is saved as a Power BI Project, so every measure is a text file under [`report/Sentavo_Treasury_Dashboard.SemanticModel/definition`](report/Sentavo_Treasury_Dashboard.SemanticModel/definition). [`dax/measures.dax`](dax/measures.dax) is a readable copy. The ones worth a look:
 
 - **Snapshot measures.** Cash and bank exposure take the last date in the filter context instead of summing balances over time. On a card that is the as-of date, and on a daily line chart each point is that day.
 - **WAPE uses one base.** The denominator is always the 1-week actuals, so errors at 1, 4 and 13 weeks are comparable.
@@ -100,6 +106,7 @@ The treasury P&L is built from the other tables, so actuals tie back to them: in
 - **Calculation group.** *Scenario View* switches the P&L measures between Actual, Budget, the latest forecast, Variance and Variance %, with its own format string for the percentage. It applies only to the P&L measures (`ISSELECTEDMEASURE`), so it can't change anything else on the page.
 - **`USERELATIONSHIP`.** Deposits are related to the date table on start date (active) and maturity date (inactive). The maturity ladder switches to the maturity date inside the measure.
 - **Rolling 3-month fee change.** Comparing three months with the same three months a year earlier removes monthly noise, so only lasting price changes cross the ±15% band. The measure stays blank until a full prior-year window exists.
+- **FX spread weighted by notional.** A simple average would let small deals set the price. The spread is weighted by CHF notional, and the cost is half the spread on each deal, the same basis as FX cost in the treasury P&L.
 - **Variance commentary.** The commentary on the budget page is written by DAX: the result against budget, the line with the largest variance and the bank most over its fee budget.
 
 ## Scenarios built into the data
@@ -111,6 +118,7 @@ The treasury P&L is built from the other tables, so actuals tie back to them: in
 - **Credit spread stress.** A market-wide widening in April 2025 that decays over the following weeks. One bank with a positive outlook tightens over the period, and the local Polish bank widens.
 - **Bank fees.** Core Bank 3 raises its payment tariffs in January 2026, and Core Bank 1 renegotiates connectivity fees in July 2025.
 - **Forecast quality.** Forecast error grows with the horizon (1, 4 and 13 weeks), and customer receipts carry an optimism bias.
+- **FX pricing.** Spreads depend on the currency pair and the bank. PLN trades are expensive, and the local Polish bank prices wider than the core banks.
 - **Budget.** The budgets hold interest rates flat and don't know about the Core Bank 3 tariff increase.
 
 ## Repository structure
@@ -141,4 +149,4 @@ python -m pytest -q
 
 ## Tools
 
-Power BI Desktop (Power Query, DAX, TMDL, Power BI Project format, row-level security), SQL (DuckDB), Python (pandas, NumPy, pytest).
+Power BI Desktop (Power Query, DAX, TMDL, Power BI Project format, calculation groups, row-level security, drill-through, report-page tooltips, bookmarks, anomaly detection), SQL (DuckDB), Python (pandas, NumPy, pytest).
