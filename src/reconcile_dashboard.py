@@ -122,6 +122,19 @@ def compute(data="data"):
     r["b01_connectivity_fees_change"] = window("2025-10-01", "2026-06-01") / window("2024-10-01", "2025-06-01") - 1
     b03 = util["B03"]
     r["b03_breach_day"] = b03[b03 > 1].index.min().date().isoformat()
+
+    # FX execution: spreads weighted by CHF notional, cost = half the spread on the notional
+    fx = pd.read_csv(data / "FactFXDeals.csv")
+    wavg = lambda g: (g["Notional_CHF"] * g["Spread_bps"]).sum() / g["Notional_CHF"].sum()
+    r["fx_deals"] = len(fx)
+    r["fx_volume_chf"] = fx["Notional_CHF"].sum()
+    r["fx_spread_bps"] = wavg(fx)
+    r["fx_cost_chf"] = (fx["Notional_CHF"] * fx["Spread_bps"] / 2 / 10000).sum()
+    r["fx_platform_share"] = fx.loc[fx["ExecutionChannel"] == "Multi-bank platform", "Notional_CHF"].sum() / r["fx_volume_chf"]
+    r["fx_eurpln_spread_bps"] = wavg(fx[fx["CurrencyPair"] == "EUR/PLN"])
+    r["fx_eurusd_spread_bps"] = wavg(fx[fx["CurrencyPair"] == "EUR/USD"])
+    r["fx_b06_spread_bps"] = wavg(fx[fx["BankKey"] == "B06"])
+    r["fx_b01_spread_bps"] = wavg(fx[fx["BankKey"] == "B01"])
     return r
 
 

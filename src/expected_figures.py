@@ -44,6 +44,15 @@ EXPECTED = {
     "deposits_share_below_best":    (0.75, 0.03, "{:.0%}"),
     "b01_connectivity_fees_change": (-0.17, 0.005, "{:+.1%}"),
     "b03_breach_day":               ("2025-01-31", None, "{}"),
+    "fx_deals":                     (749, 0, "{}"),
+    "fx_volume_chf":                (2.80e9, 0.005e9, "{:,.0f}"),
+    "fx_spread_bps":                (3.23, 0.005, "{:.2f}"),
+    "fx_cost_chf":                  (452e3, 0.5e3, "{:,.0f}"),
+    "fx_platform_share":            (0.843, 0.0005, "{:.1%}"),
+    "fx_eurpln_spread_bps":         (10.65, 0.005, "{:.2f}"),
+    "fx_eurusd_spread_bps":         (1.54, 0.005, "{:.2f}"),
+    "fx_b06_spread_bps":            (13.38, 0.005, "{:.2f}"),
+    "fx_b01_spread_bps":            (2.30, 0.005, "{:.2f}"),
 }
 
 

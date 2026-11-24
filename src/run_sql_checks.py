@@ -94,6 +94,15 @@ def compute(con):
           AND FeeMonth BETWEEN DATE '2025-10-01' AND DATE '2026-06-01'""")[0]
     r["b03_breach_day"] = one(
         "SELECT FirstDayOver FROM v_limit_breach_episodes WHERE BankKey = 'B03'")[0].isoformat()
+    r["fx_deals"], r["fx_volume_chf"], r["fx_spread_bps"], r["fx_cost_chf"], r["fx_platform_share"] = one("""
+        SELECT COUNT(*), SUM(Notional_CHF), SUM(Notional_CHF * Spread_bps) / SUM(Notional_CHF),
+               SUM(SpreadCost_CHF),
+               SUM(Notional_CHF) FILTER (WHERE ExecutionChannel = 'Multi-bank platform') / SUM(Notional_CHF)
+        FROM v_fx_deals""")
+    r["fx_eurpln_spread_bps"] = one("SELECT Spread_bps FROM v_fx_by_pair WHERE CurrencyPair = 'EUR/PLN'")[0]
+    r["fx_eurusd_spread_bps"] = one("SELECT Spread_bps FROM v_fx_by_pair WHERE CurrencyPair = 'EUR/USD'")[0]
+    r["fx_b06_spread_bps"] = one("SELECT Spread_bps FROM v_fx_by_bank WHERE BankKey = 'B06'")[0]
+    r["fx_b01_spread_bps"] = one("SELECT Spread_bps FROM v_fx_by_bank WHERE BankKey = 'B01'")[0]
     return r
 
 

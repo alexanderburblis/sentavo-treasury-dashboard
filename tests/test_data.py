@@ -67,3 +67,17 @@ def test_rls_mapping(data_dir):
     treasurer = users[users["UserPrincipalName"].str.startswith("group.treasurer")]
     assert set(treasurer["EntityKey"]) == set(entities)
     assert not users.duplicated().any()
+
+
+def test_fx_channel_matters_less_than_pair(con):
+    """Within each pair, phone and platform prices sit within 1 bp; across pairs they differ by 9 bps."""
+    gaps = con.execute("""
+        SELECT CurrencyPair, MAX(Spread_bps) - MIN(Spread_bps) FROM v_fx_pair_channel
+        GROUP BY CurrencyPair""").fetchall()
+    assert all(gap < 1.0 for _, gap in gaps)
+    lo, hi = con.execute("SELECT MIN(Spread_bps), MAX(Spread_bps) FROM v_fx_by_pair").fetchone()
+    assert hi - lo > 9
+
+
+def test_fx_share_of_wallet_sums_to_one(con):
+    assert con.execute("SELECT SUM(ShareOfWallet) FROM v_fx_by_bank").fetchone()[0] == pytest.approx(1.0)
